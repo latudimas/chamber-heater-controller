@@ -35,6 +35,7 @@ as Klipper, a phone, or a script only send high-level commands.
 | [docs/06-safety.md](docs/06-safety.md) | Safety invariants, faults, hardware protections |
 | [docs/07-klipper-integration.md](docs/07-klipper-integration.md) | How Klipper talks to the controller |
 | [docs/08-commissioning.md](docs/08-commissioning.md) | Bring-up and test plan |
+| [docs/09-fmea.md](docs/09-fmea.md) | Failure modes and effects analysis, open safety actions |
 | [docs/decisions.md](docs/decisions.md) | Decision log (ADR-style) and open questions |
 | [AGENTS.md](AGENTS.md) | Guidance for coding agents working in this repo |
 

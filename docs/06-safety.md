@@ -18,6 +18,9 @@ MOSFET, fan) can cause uncontrolled heating.
 Layers 5 and 6 are **not optional**. A MOSFET usually fails shorted, and no
 software can switch off a shorted MOSFET.
 
+Per-component failure modes, how each is detected, and the open gaps are in
+[09-fmea.md](09-fmea.md).
+
 ## Invariants (must always hold)
 
 1. Every heater output is **off** at boot, until the state machine explicitly enables it.
