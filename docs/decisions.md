@@ -19,6 +19,8 @@ Lightweight ADRs. Append new decisions; supersede old ones rather than editing t
 | ADR-013 | Master relay upstream of the heater MOSFETs | Accepted |
 | ADR-014 | Detect a stuck heater from temperature, no current sensing (for now) | Accepted |
 | ADR-015 | Schematic in KiCad (`hardware/kicad/`) | Accepted |
+| ADR-016 | Formal verification: TLA+ model of the safety state machine now, CBMC on the C later; Nix dev shell | Accepted |
+| ADR-017 | Build v1 on perfboard, no custom PCB | Accepted |
 
 ---
 
@@ -101,6 +103,18 @@ Lightweight ADRs. Append new decisions; supersede old ones rather than editing t
 **Why:** ERC checks connectivity, and the same project can later become a PCB.
 **Note:** The pin map in the schematic must match `docs/04-wiring.md` and, once it exists, `firmware/include/config.h`.
 
+### ADR-016: Formal verification with TLA+, then CBMC
+**Context:** The controller switches ~200 W unattended. Unit tests check the cases someone thought of; a model checker checks every interleaving of inputs, commands and resets.
+**Decision:** The safety state machine is modelled in TLA+ (`spec/HeaterSafety.tla`) and checked with TLC (`make -C spec check`). A mutation script (`make -C spec mutants`) breaks the design on purpose to prove the properties can fail. Once the firmware exists, CBMC harnesses check the C safety layer against the same invariants. Tooling comes from a Nix flake (`nix develop`).
+**Why:** TLA+ works before any code exists and finds design bugs while they are cheap. The first run changed the design: `PREHEAT` gained a fan spin-up phase before K1 closes, and `CLEAR` now also needs a cool outlet.
+**Cost:** The model is an abstraction (booleans, ticks) and can drift from the docs and code; keep them in step. KiCad is not in the flake (the nixpkgs build is broken here); use the KiCad app.
+
+### ADR-017: Build v1 on perfboard
+**Context:** One unit; open questions (gate drive at 3.3 V, commissioning thresholds) may change the circuit.
+**Decision:** v1 is built on perfboard with the ESP32 dev board. Heater current (8–12 A per channel) stays on 14 AWG wire, screw terminals, inline fuse holders and a socketed automotive relay, never on perfboard tracks. Only logic, drivers and sensor headers go on the board.
+**Why:** Fast to build and change; avoids designing high-current PCB traces.
+**Revisit:** after commissioning. The KiCad schematic carries over to a PCB if one is wanted; heater current would still stay off the board.
+
 ---
 
 ## Open questions
@@ -114,3 +128,4 @@ Lightweight ADRs. Append new decisions; supersede old ones rather than editing t
 - Whether `2 heaters + 1 fan` is allowed (depends on commissioning data).
 - Heater MOSFET: is the IRLB8721 fully on at a 3.3 V gate, or is a gate driver needed? (FMEA A3)
 - `F_HEATER_STUCK` thresholds: outlet rise and time window (set in commissioning).
+- A watchdog reset loses the latched fault (RAM) and switches the fans off even if the outlet is hot. Persist the fault code across resets (RTC memory / NVS), and run the fans at boot while the outlet is hot? (Found while modelling; the TLA+ `Reboot` action currently assumes power-loss behaviour.)

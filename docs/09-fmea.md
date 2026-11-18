@@ -94,7 +94,7 @@ pull-downs · `L5` thermal cutoff (TCO) · `L6` electrical fuses · `L7` master 
 | FM-51 | Firmware | One task hangs (e.g. safety task) while another keeps feeding the watchdog | Safety checks stop; watchdog doesn't fire | 4 | None if watchdog fed from one place | Feed WDT only when **every** critical task has checked in | **GAP** – A13 |
 | FM-52 | Firmware | Reset loop | Repeated boots | 2 | Boot counter | No auto-resume, so heaters stay off | OK |
 | FM-53 | Stored config (NVS) | Corrupted / out of range | Wrong limits (e.g. `outlet_max` too high) | 4 | None | CRC on config + range-check on **load**, not only on command; fall back to defaults and latch a fault | **GAP** – A14 |
-| FM-54 | Firmware | Logic bug in state machine / safety layer | Any invariant violated | 4 | Unit tests | Formal verification of the safety state machine (TLA+), later CBMC on the C | Planned |
+| FM-54 | Firmware | Logic bug in state machine / safety layer | Any invariant violated | 4 | Unit tests | TLA+ model of the safety state machine, checked with TLC plus mutation tests (`spec/`); CBMC on the C later | Design verified (model); code pending |
 | FM-55 | Firmware | Wi-Fi / web stack starves CPU | Control or safety loop late | 3 | Task watchdog | Safety task at higher priority, pinned to a core | OK (design) |
 
 ## 6. Commands and environment

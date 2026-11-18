@@ -31,10 +31,18 @@ Per-component failure modes, how each is detected, and the open gaps are in
 3. No heater is on if any required sensor reading is missing, stale (> 3 s), or out of plausible range.
 4. No heater is on while the outlet temperature is ≥ `outlet_max`.
 5. Fans keep running after the heaters stop until the outlet temperature is below `cooldown_temp` (and at least `cooldown_min_s`), including in `FAULT`.
-6. A fault is **latched**. It needs `CLEAR`, and `CLEAR` is refused while the cause is still present.
+6. A fault is **latched**. It needs `CLEAR`, and `CLEAR` is refused while the cause is still present or the outlet is still above `cooldown_temp`.
 7. No auto-resume after a reboot or power loss.
 8. Mode limits (`max_target`, `max_duration`) cannot be exceeded by any command.
-9. The master relay K1 is closed only in `PREHEAT` and `RUN`. It closes before any heater gate turns on, and opens only after every gate is low. Fans and logic are never powered through K1.
+9. The master relay K1 is closed only in the check phase of `PREHEAT` and in `RUN`, and only after both fans are confirmed by tach. It closes with every heater gate low, at least one control tick before any gate may turn on (the stuck-heater check window). When it opens, the gates are written low first, in the same control tick. Fans and logic are never powered through K1.
+
+## Formal model
+
+The state machine and invariants 2–9 are model-checked with TLA+ in
+[`spec/`](../spec/README.md) (`make -C spec check`). The model also shows
+that, with K1, a heater MOSFET that fails shorted can only produce heat while
+heating with airflow, and is cut within one tick of being commanded off.
+Hardware layers 1, 3–6 are outside the model.
 
 ## Fault codes
 

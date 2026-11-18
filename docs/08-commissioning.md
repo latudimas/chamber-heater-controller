@@ -50,6 +50,8 @@ For each combination, run 10 min at 100 % heater duty and record the outlet and 
 - [ ] Test build with an infinite loop → watchdog reset, outputs off, boots to `IDLE`.
 - [ ] Power-cycle mid-run → boots to `IDLE`, no auto-resume.
 - [ ] `CLEAR` refused while the cause is still present.
+- [ ] `CLEAR` refused while the outlet is still above `cooldown_temp`.
+- [ ] `START` with a fan unplugged → stays in `PREHEAT` spin-up with K1 open, then faults; heaters never energised.
 - [ ] Bridge a heater MOSFET drain to source (fans on) → `F_HEATER_STUCK`, K1 opens, heater goes cold.
 
 ## 6. Enclosure characterisation

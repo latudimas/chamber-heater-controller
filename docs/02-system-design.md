@@ -71,17 +71,19 @@ above it. Nothing upstream can bypass it.
 | State | Heaters | Fans | Exit |
 |---|---|---|---|
 | `IDLE` | off | off | valid `START` → `PREHEAT` |
-| `PREHEAT` | K1 closes, gates still low (stuck-heater check); then H1 on; H2 joins after `stagger_s` | mode profile, verified by tach | fans confirmed and stagger done → `RUN` |
+| `PREHEAT` | off. Two phases: **spin-up** (K1 open) until both tachs read ≥ `min_rpm` (timeout → `F_FAN_STALL`); then **check** (K1 closes, gates still low) for one stuck-heater check window | mode profile, verified by tach | check passed → `RUN` |
 | `RUN` | PID-driven | mode profile | timer expired, `STOP`, or end condition → `COOLDOWN` |
 | `COOLDOWN` | off | 100 % | outlet < `cooldown_temp` **and** ≥ `cooldown_min_s` → `IDLE` |
-| `FAULT` | off (forced) | 100 % while outlet is hot, then off | `CLEAR` command with the cause resolved → `IDLE` |
+| `FAULT` | off (forced) | 100 % while outlet is hot, then off | `CLEAR` with the cause resolved and outlet < `cooldown_temp` → `IDLE` |
 
 Rules:
 - `START` while in `RUN` is rejected. Use `SET` to change the target or duration.
 - `STOP` from any non-fault state → `COOLDOWN`.
 - A fault from any state → `FAULT`. The fault is latched and needs an explicit `CLEAR`.
 - A reboot always lands in `IDLE`. There is no auto-resume (ADR-009).
-- The master heater relay K1 is closed only in `PREHEAT` and `RUN` (ADR-013, safety invariant 9). Every other state, including `COOLDOWN` and `FAULT`, has K1 open.
+- The master heater relay K1 is closed only in the check phase of `PREHEAT` and in `RUN` (ADR-013, safety invariant 9). Every other state and phase, including spin-up, `COOLDOWN` and `FAULT`, has K1 open.
+- `CLEAR` is accepted only when the fault's cause is gone **and** the outlet is below `cooldown_temp`; otherwise the fans would stop while the PTC is still hot.
+- These rules are model-checked in [`spec/`](../spec/README.md).
 
 ## Control loop
 
@@ -101,7 +103,7 @@ Rules:
 
 Cold PTCs draw ~1.5× running current. Two together is ~25–30 A, which is above the 24 A PSU.
 
-- `PREHEAT` switches H1 on (optionally ramping 30 % → 100 % over `ramp_s`).
+- When `RUN` starts, H1 switches on first (optionally ramping 30 % → 100 % over `ramp_s`).
 - H2 is enabled only after `stagger_s` (default 8 s) **and** only if PID demand is above 100 %.
 - The same rule applies whenever H2 turns on later from cold, e.g. after a long idle in `RUN`.
 

@@ -19,7 +19,7 @@ START mode=dry preset=<PLA|TPU|PETG|ABS|ASA>
 SET   target=<°C> | duration=<min> | duration=+<min>
 STOP
 STATUS
-CLEAR                      # clear a latched fault (only if the cause is gone)
+CLEAR                      # clear a latched fault (only if the cause is gone and the outlet is cool)
 PRESETS                    # list presets
 VERSION
 ```

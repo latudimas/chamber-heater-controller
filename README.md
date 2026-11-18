@@ -37,8 +37,22 @@ as Klipper, a phone, or a script only send high-level commands.
 | [docs/08-commissioning.md](docs/08-commissioning.md) | Bring-up and test plan |
 | [docs/09-fmea.md](docs/09-fmea.md) | Failure modes and effects analysis, open safety actions |
 | [hardware/kicad/](hardware/kicad/) | KiCad schematic ([PDF](hardware/kicad/chamber-heater.pdf)) |
+| [spec/](spec/README.md) | TLA+ model of the safety state machine |
 | [docs/decisions.md](docs/decisions.md) | Decision log (ADR-style) and open questions |
 | [AGENTS.md](AGENTS.md) | Guidance for coding agents working in this repo |
+
+## Development
+
+Tooling comes from a Nix flake. With direnv the shell loads on `cd`; otherwise:
+
+```bash
+nix develop
+make -C spec check     # model-check the safety state machine (TLA+)
+make -C spec mutants   # prove the checks can fail
+python docs/diagrams/gen_diagrams.py
+```
+
+KiCad is not in the flake; use the KiCad app.
 
 ## Roadmap
 

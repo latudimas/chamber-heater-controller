@@ -18,6 +18,8 @@ AGENTS.md               this file
 docs/                   design docs (source of truth for behaviour)
   decisions.md          ADR log + open questions
 hardware/kicad/         KiCad schematic (+ PDF export)
+spec/                   TLA+ model of the safety state machine (make -C spec check)
+flake.nix               dev shell: nix develop (TLA+ tools, Python for docs diagrams)
 firmware/               (not yet created) ESP32 firmware
   include/config.h      pin map, limits, defaults – single source of truth
 host/                   (future) Klipper macros, shell scripts
@@ -46,6 +48,7 @@ host/                   (future) Klipper macros, shell scripts
 - Pure logic (state machine, PID, allocator, interlocks, command parser) must be host-testable without hardware. Keep it free of ESP-IDF/Arduino includes.
 - Every new fault path needs a unit test that triggers it and asserts the heaters are off.
 - Hardware-level checks follow `docs/08-commissioning.md`.
+- Any change to the state machine or safety rules must update `spec/HeaterSafety.tla` and keep `make -C spec check` and `make -C spec mutants` passing. The firmware implements the spec, not the other way round.
 
 ## Open decisions
 
