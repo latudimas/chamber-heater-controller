@@ -9,15 +9,17 @@
 | 3 | Nidec W40S12BS4A5-07 fan | 2 | 40×40×28 mm, 12 V, 0.73 A, 4-wire (PWM + tach). Stacked in series. |
 | 4 | 12 V 24 A PSU | 1 | Mounted **outside** the enclosure. Earthed. |
 | 5 | Logic-level N-MOSFET (heater switch) | 2 | Fully on at V_GS ≤ 3.3 V (e.g. IRLB8721, IRLR7843) **or** a gate driver stage. ≥ 30 A rating, low R_DS(on). |
-| 6 | P-MOSFET + NPN driver (fan power cut) | 2 | High-side so the tach ground reference stays intact. |
+| 6 | P-MOSFET + NPN driver (fan power cut) | 2 | High-side so the tach ground reference stays intact. e.g. AO3401A + BC547, with a gate divider (V_GS ±12 V limit). |
 | 7 | Small N-MOSFET / NPN (fan PWM, open-drain) | 2 | e.g. 2N7002 / BC547. |
 | 8 | SHT40 (or SHT31) breakout | 1 | Chamber air temp + RH, I2C. |
 | 9 | DS18B20 (wired probe) | 1 | Heater outlet temperature, 1-Wire. Max 125 °C. |
+| 9a | 12 V automotive relay (master heater relay K1) | 1 | 30/40 A contacts, ~150 mA coil. Driven by a BC337 + 1N4007 flyback diode. See ADR-013. |
 | 10 | Thermal cutoff fuse, one-shot | 2 | One in series with each heater. ~100–120 °C, mounted on the duct near the PTC. |
-| 11 | Blade/inline fuse + holder | 3 | ~10–12 A per heater channel, ~20–25 A main. |
+| 11 | Blade/inline fuse + holder | 4 | ~10–12 A per heater channel, ~20–25 A main, 3 A for fans + logic. |
 | 12 | SSD1306 0.96" OLED (I2C) | 1 | Optional local display. |
 | 13 | Rotary encoder with push button | 1 | Optional local control. |
-| 14 | Resistors | – | 10 kΩ gate pull-downs, 100 Ω gate series, 10 kΩ tach pull-ups, 4.7 kΩ 1-Wire pull-up. |
+| 14 | Resistors, capacitors | – | 10 kΩ gate pull-downs, 100 Ω gate series, 10 kΩ tach pull-ups, 10 nF tach filters, 4.7 kΩ 1-Wire pull-up, 470 Ω relay base. Full list in the schematic. |
+| 14a | 12 V → 5 V buck module | 1 | ≥ 1 A. Powers the ESP32 dev board. |
 | 15 | Wire | – | 12 AWG main 12 V run, 14 AWG per heater, 22–24 AWG signals. |
 | 16 | Duct | 1 | High-temp material near the PTC (metal / standoffs); printed parts kept clear of fins. |
 | 17 | Vent (dry mode) | 1 | Optional small exhaust fan or servo flap to purge moist air. |

@@ -17,6 +17,7 @@ README.md               overview + doc index
 AGENTS.md               this file
 docs/                   design docs (source of truth for behaviour)
   decisions.md          ADR log + open questions
+hardware/kicad/         KiCad schematic (+ PDF export)
 firmware/               (not yet created) ESP32 firmware
   include/config.h      pin map, limits, defaults – single source of truth
 host/                   (future) Klipper macros, shell scripts
@@ -29,7 +30,7 @@ host/                   (future) Klipper macros, shell scripts
 3. **No heater logic in hosts.** Klipper / scripts send commands only (`docs/07-klipper-integration.md`).
 4. **One command parser.** Transports (serial, HTTP, MQTT, UI) only move bytes. Don't add transport-specific commands.
 5. **Validate, don't clamp.** Out-of-range commands return `ERR E_RANGE`; never silently change user values.
-6. **Pin map changes** must update `firmware/include/config.h` **and** `docs/04-wiring.md` in the same change. Never use GPIO 0, 2, 5, 12, 14, 15 for heater gates.
+6. **Pin map changes** must update `firmware/include/config.h`, `docs/04-wiring.md` **and** the schematic in `hardware/kicad/` in the same change. Never use GPIO 0, 2, 5, 12, 14, 15 for heater gates.
 7. **Behaviour changes** must update the relevant doc in `docs/`. Design decisions get a new ADR entry in `docs/decisions.md` (supersede old ones; don't rewrite history).
 
 ## Conventions

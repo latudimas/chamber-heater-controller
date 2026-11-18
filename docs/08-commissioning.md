@@ -21,6 +21,8 @@ Do these in order. Don't skip ahead to full power.
 
 - [ ] Heater MOSFET temperature at full current after 10 min (should stay warm, not hot).
 - [ ] MCU unpowered / in reset → heaters stay off (pull-downs working).
+- [ ] MCU unpowered / in reset → K1 open (no 12 V on `HEAT_12V`).
+- [ ] K1 closed, gates low, fans on → heaters stay cold (no MOSFET leakage).
 - [ ] Boot sequence watched on a scope or LED → no glitch on the heater gates.
 
 ## 4. Airflow & temperature limits (this sets the config)
@@ -48,6 +50,7 @@ For each combination, run 10 min at 100 % heater duty and record the outlet and 
 - [ ] Test build with an infinite loop → watchdog reset, outputs off, boots to `IDLE`.
 - [ ] Power-cycle mid-run → boots to `IDLE`, no auto-resume.
 - [ ] `CLEAR` refused while the cause is still present.
+- [ ] Bridge a heater MOSFET drain to source (fans on) → `F_HEATER_STUCK`, K1 opens, heater goes cold.
 
 ## 6. Enclosure characterisation
 

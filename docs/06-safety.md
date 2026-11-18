@@ -14,9 +14,12 @@ MOSFET, fan) can cause uncontrolled heating.
 | 4. Gate pull-downs | boot, reset, floating pins | 10 kΩ gate-to-source |
 | 5. Thermal cutoff (TCO) | MOSFET shorted on, firmware fully wrong | one-shot fuse in series with each heater |
 | 6. Electrical fuses | short circuit, wiring overload | per-channel and main fuses |
+| 7. Master heater relay | heater MOSFET shorted, GPIO stuck high | relay K1 feeds the heaters only; firmware opens it on any fault (ADR-013) |
 
 Layers 5 and 6 are **not optional**. A MOSFET usually fails shorted, and no
-software can switch off a shorted MOSFET.
+software can switch off a shorted MOSFET. Layer 7 lets firmware cut a shorted
+MOSFET's supply; it does not replace the TCO, because the relay and its driver
+can fail too.
 
 Per-component failure modes, how each is detected, and the open gaps are in
 [09-fmea.md](09-fmea.md).
@@ -31,6 +34,7 @@ Per-component failure modes, how each is detected, and the open gaps are in
 6. A fault is **latched**. It needs `CLEAR`, and `CLEAR` is refused while the cause is still present.
 7. No auto-resume after a reboot or power loss.
 8. Mode limits (`max_target`, `max_duration`) cannot be exceeded by any command.
+9. The master relay K1 is closed only in `PREHEAT` and `RUN`. It closes before any heater gate turns on, and opens only after every gate is low. Fans and logic are never powered through K1.
 
 ## Fault codes
 
@@ -42,6 +46,7 @@ Per-component failure modes, how each is detected, and the open gaps are in
 | `F_SENSOR` | SHT40 or DS18B20 missing, stale, CRC error, or implausible |
 | `F_NO_HEAT` | chamber rises < `min_gain` °C within `heat_check_s` while demand is high (dead heater, open enclosure, wrong sensor placement) |
 | `F_RUNTIME` | absolute max runtime exceeded (independent of the user timer) |
+| `F_HEATER_STUCK` | outlet temperature rises by > `stuck_rise_c` within `stuck_check_s` while K1 is closed and every heater gate is low (shorted MOSFET or GPIO stuck high) |
 | `F_BROWNOUT` | supply voltage dropped (if monitored) |
 
 ## Fault behaviour
@@ -49,6 +54,7 @@ Per-component failure modes, how each is detected, and the open gaps are in
 ```
 fault detected
   → heaters OFF immediately (gates low)
+  → master relay K1 opens (after the gates are low)
   → fans 100 % (if powered and not themselves the fault cause) until outlet cool
   → state = FAULT, code recorded, published on all transports
   → OLED shows the fault; status LED blinks
@@ -67,3 +73,4 @@ fault detected
 - Pull a fan connector while heating → expect `F_FAN_STALL` within 2 s.
 - Unplug each sensor → expect `F_SENSOR`.
 - Hold the firmware in a loop (test build) → expect a watchdog reset with outputs off.
+- Bridge a heater MOSFET drain to source while K1 is closed and the gates are low → expect `F_HEATER_STUCK` and K1 opening.

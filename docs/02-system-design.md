@@ -71,7 +71,7 @@ above it. Nothing upstream can bypass it.
 | State | Heaters | Fans | Exit |
 |---|---|---|---|
 | `IDLE` | off | off | valid `START` → `PREHEAT` |
-| `PREHEAT` | H1 on; H2 joins after `stagger_s` | mode profile, verified by tach | fans confirmed and stagger done → `RUN` |
+| `PREHEAT` | K1 closes, gates still low (stuck-heater check); then H1 on; H2 joins after `stagger_s` | mode profile, verified by tach | fans confirmed and stagger done → `RUN` |
 | `RUN` | PID-driven | mode profile | timer expired, `STOP`, or end condition → `COOLDOWN` |
 | `COOLDOWN` | off | 100 % | outlet < `cooldown_temp` **and** ≥ `cooldown_min_s` → `IDLE` |
 | `FAULT` | off (forced) | 100 % while outlet is hot, then off | `CLEAR` command with the cause resolved → `IDLE` |
@@ -81,6 +81,7 @@ Rules:
 - `STOP` from any non-fault state → `COOLDOWN`.
 - A fault from any state → `FAULT`. The fault is latched and needs an explicit `CLEAR`.
 - A reboot always lands in `IDLE`. There is no auto-resume (ADR-009).
+- The master heater relay K1 is closed only in `PREHEAT` and `RUN` (ADR-013, safety invariant 9). Every other state, including `COOLDOWN` and `FAULT`, has K1 open.
 
 ## Control loop
 

@@ -13,16 +13,24 @@
 - **Both heaters starting cold together (~25–30 A) exceeds the PSU.** The firmware staggers the start (see [02-system-design.md](02-system-design.md)).
 - `max_power` per channel (e.g. 0.85) adds headroom if the PSU sags.
 
+## Schematic
+
+The full schematic is a KiCad project in [`hardware/kicad/`](../hardware/kicad/)
+([PDF](../hardware/kicad/chamber-heater.pdf)). The sections below summarise it.
+If they disagree, fix both in the same change.
+
 ## Power distribution
 
 ```
- PSU +12V ──[F_main 20–25 A]──┬──[F_h1 10–12 A]──[TCO_1]── H1 (+)   H1 (−) ── Q_H1 drain
-                              ├──[F_h2 10–12 A]──[TCO_2]── H2 (+)   H2 (−) ── Q_H2 drain
-                              ├── Q_F1 (P-MOSFET) ── F1 red    F1 black ── GND
-                              ├── Q_F2 (P-MOSFET) ── F2 red    F2 black ── GND
-                              └── buck 12→5 V ── ESP32 5V/VIN
+ PSU +12V ──[F_main 20–25 A]──┬──[K1 relay]── HEAT_12V ──┬──[F_h1 10–12 A]──[TCO_1]── H1 (+)   H1 (−) ── Q_H1 drain
+                              │                          └──[F_h2 10–12 A]──[TCO_2]── H2 (+)   H2 (−) ── Q_H2 drain
+                              └──[F_aux 3 A]── 12V_AUX ──┬── Q_F1 (P-MOSFET) ── F1 red    F1 black ── GND
+                                                         ├── Q_F2 (P-MOSFET) ── F2 red    F2 black ── GND
+                                                         └── buck 12→5 V ── ESP32 5V/VIN
  PSU GND  ──────── star ground: heater MOSFET sources, fans, buck, ESP32 GND
 ```
+
+- **K1 feeds the heaters only.** Fans and logic come from `12V_AUX` so they keep running in `COOLDOWN` and `FAULT`.
 
 - 12 AWG from the PSU to the distribution point, 14 AWG per heater.
 - TCO = thermal cutoff (one-shot), mounted on the duct next to each PTC.
@@ -42,12 +50,28 @@
 - If the MOSFET isn't fully on at 3.3 V, add a driver stage (NPN + pull-up to 12 V, gate clamped to ≤ 15 V).
 - The load is resistive, so no flyback diode is needed.
 
+## Master heater relay (K1)
+
+```
+ +12V ──┬── K1 coil A1          K1 contact 14 ── +12V
+        │                       K1 contact 13 ── HEAT_12V (to heater fuses)
+   1N4007 (cathode to +12V)
+        │
+        └── K1 coil A2 ── BC337 collector
+                          BC337 emitter ── GND
+ GPIO17 ──[470 Ω]── BC337 base
+ GPIO17 ──[10 kΩ]── GND   (default OFF at boot)
+```
+
+- 12 V automotive relay, 30/40 A contacts, ~150 mA coil. The flyback diode is mandatory.
+- Firmware closes K1 only with all heater gates low, and opens it only after they are low. The contacts never switch load current.
+
 ## Fan PWM (×2, open-drain)
 
 ```
- GPIO ──[1 kΩ]── NPN base (or 2N7002 gate)
-                 collector/drain ── fan blue (PWM)   (fan has internal pull-up)
-                 emitter/source ── GND
+ GPIO ──[100 Ω]── 2N7002 gate     gate ──[10 kΩ]── GND
+                 drain ── fan blue (PWM)   (fan has internal pull-up)
+                 source ── GND
 ```
 
 - 25 kHz LEDC. **Inverted logic:** GPIO high pulls PWM low, which means slower. Handle this in the HAL.
@@ -60,18 +84,20 @@
 ```
 
 - 2 pulses per revolution → `rpm = pulses_per_s × 30`.
-- Optional 100 nF to GND for noise filtering.
+- 10 nF to GND for noise filtering. **Not 100 nF:** 10 kΩ × 100 nF smears the ~450 Hz tach pulses at full speed.
 
 ## Fan power cut (×2, high-side)
 
 ```
  +12V ── P-MOSFET source
          gate ──[10 kΩ to source]  (default OFF)
-         gate ── NPN collector; NPN base ──[1 kΩ]── GPIO
+         gate ──[10 kΩ]── NPN collector; NPN emitter ── GND
+         NPN base ──[1 kΩ]── GPIO;  GPIO ──[10 kΩ]── GND
          drain ── fan red
 ```
 
 - High-side, so the fan's ground stays solid and the tach reads correctly.
+- The 10 kΩ / 10 kΩ divider holds V_GS at about −6 V. Small P-MOSFETs such as the AO3401A are rated ±12 V, so the full 12 V on the gate would be at the limit.
 
 ## Pin map (ESP32-WROOM-32)
 
@@ -91,7 +117,8 @@
 | Encoder A / B | 13 / 27 | optional |
 | Encoder button | 23 | optional |
 | Vent fan / servo | 16 | optional, dry mode |
+| Master heater relay K1 | 17 | → BC337, 10 kΩ pull-down (open at boot) |
 
 **Do not use:** GPIO 0, 2, 5, 12, 15 (strapping pins; GPIO12 sets the flash voltage); 1, 3 (USB serial); 6–11 (flash); 5, 14, 15 for heaters (they pulse or go high at boot).
 
-The pin map lives in `firmware/include/config.h`. Keep this table in sync with it.
+The pin map lives in `firmware/include/config.h` (not created yet; it must include GPIO17). Keep this table and the schematic in sync with it.

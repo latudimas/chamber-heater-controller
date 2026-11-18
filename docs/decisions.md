@@ -16,6 +16,9 @@ Lightweight ADRs. Append new decisions; supersede old ones rather than editing t
 | ADR-010 | Mode profiles: heater / dry / vent | Accepted |
 | ADR-011 | Skip the W3230 thermostat | Accepted |
 | ADR-012 | Firmware framework | **Open** |
+| ADR-013 | Master relay upstream of the heater MOSFETs | Accepted |
+| ADR-014 | Detect a stuck heater from temperature, no current sensing (for now) | Accepted |
+| ADR-015 | Schematic in KiCad (`hardware/kicad/`) | Accepted |
 
 ---
 
@@ -80,6 +83,24 @@ Lightweight ADRs. Append new decisions; supersede old ones rather than editing t
 - **ESP-IDF (C) or Rust (esp-idf-hal):** full control, best for the watchdog/RTOS-task design; more effort.
 **Leaning:** to be decided.
 
+### ADR-013: Master relay upstream of the heater MOSFETs
+**Context:** FMEA FM-01/FM-05: a heater MOSFET usually fails shorted, and a GPIO can be stuck high. Until now the one-shot TCO was the only thing that could stop the heater.
+**Decision:** One 12 V automotive relay (K1, 30/40 A contacts) feeds both heater channels. The ESP32 drives it through a BC337 (GPIO17, 10 kΩ pull-down, so it is open at boot). Fans and logic are **not** behind K1. K1 is closed only in `PREHEAT` and `RUN`; it closes before any gate turns on and opens after the gates are low, so its contacts never switch load current.
+**Why:** Cheap, simple, independent of the MOSFETs, and gives firmware a way to cut a heater it can no longer switch off. Supplements ADR-005 (the MOSFETs still do the PWM); does not replace it.
+**Cost:** One relay, one transistor, one GPIO, ~150 mA coil current while heating. A welded relay is a latent failure; switching without load makes it unlikely.
+**Alternatives:** A second high-side MOSFET per channel (no moving parts, more parts, shares the MOSFET failure mode); relying on the TCO alone (rejected).
+
+### ADR-014: Detect a stuck heater from temperature
+**Context:** FMEA action A1. With K1 in place, firmware still has to notice that a heater is on when it shouldn't be.
+**Decision:** New fault `F_HEATER_STUCK`: the outlet temperature rises while every heater gate is low and K1 is closed. No current sensing for now.
+**Why:** No extra hardware. K1 closes with the gates still low at the start of `PREHEAT`, which gives a natural check window before any heater is enabled.
+**Cost:** Slower and less precise than current sensing. Revisit (INA219 or a shunt amplifier per channel) if commissioning shows the temperature check is too slow or noisy.
+
+### ADR-015: Schematic in KiCad
+**Decision:** The schematic lives in `hardware/kicad/` as a KiCad project, with a PDF export next to it for reading without KiCad.
+**Why:** ERC checks connectivity, and the same project can later become a PCB.
+**Note:** The pin map in the schematic must match `docs/04-wiring.md` and, once it exists, `firmware/include/config.h`.
+
 ---
 
 ## Open questions
@@ -91,3 +112,5 @@ Lightweight ADRs. Append new decisions; supersede old ones rather than editing t
 - Duct material near the PTC.
 - Dry-mode vent: passive hole vs exhaust fan vs servo flap.
 - Whether `2 heaters + 1 fan` is allowed (depends on commissioning data).
+- Heater MOSFET: is the IRLB8721 fully on at a 3.3 V gate, or is a gate driver needed? (FMEA A3)
+- `F_HEATER_STUCK` thresholds: outlet rise and time window (set in commissioning).

@@ -25,24 +25,28 @@ prioritise at this stage.
 ## Layer references
 
 `L1` PTC physics · `L2` firmware safety layer · `L3` watchdog · `L4` gate
-pull-downs · `L5` thermal cutoff (TCO) · `L6` electrical fuses ·
+pull-downs · `L5` thermal cutoff (TCO) · `L6` electrical fuses · `L7` master heater relay K1 ·
 `C` commissioning check ([08-commissioning.md](08-commissioning.md)).
 
 ## 1. Heater power path
 
 | ID | Item | Failure mode | Effect | Sev | Detection | Mitigation | Status |
 |---|---|---|---|---|---|---|---|
-| FM-01 | Heater N-MOSFET | Fails **shorted** (most common MOSFET failure) | Heater on regardless of firmware. Fans still forced on by L2, so the PTC self-limits; if fans also fail, only the TCO stops it | 4 | Indirect only: `F_OUTLET_OVERTEMP` or `F_CHAMBER_OVERTEMP` fires, but firmware cannot turn the heater off | L1, L5 (TCO), L2 keeps fans at 100 % | **GAP** – A1, A2 |
+| FM-01 | Heater N-MOSFET | Fails **shorted** (most common MOSFET failure) | Heater on regardless of firmware. Fans still forced on by L2, so the PTC self-limits; if fans also fail, only the TCO stops it | 4 | `F_HEATER_STUCK` (outlet rises with gates low), planned | L7: firmware opens master relay K1; L5 (TCO) as backstop; L2 keeps fans at 100 % | Mitigated in design (A2). Detection pending firmware (A1) |
 | FM-02 | Heater N-MOSFET | Fails open | Heater never heats | 2 | `F_NO_HEAT` | Replace part | OK |
 | FM-03 | Heater N-MOSFET | Not fully enhanced at 3.3 V gate (wrong part / threshold) | MOSFET runs in linear region, overheats; may then fail shorted (→ FM-01) | 3 | None in firmware | Logic-level part spec'd at V_GS ≤ 3.3 V, or gate driver; C: measure V_DS and MOSFET temp at full load | **GAP** – A3 |
 | FM-04 | Gate pull-down (10 kΩ) | Missing, open, or bad solder | Gate floats at boot / reset; heater may turn on with no airflow | 4 | None | L5; C: check gate-to-source resistance with power off | **GAP** – A4 |
-| FM-05 | Gate series / GPIO | GPIO stuck high (ESP32 damaged) | Same as FM-01 | 4 | Same as FM-01 | Same as FM-01 | **GAP** – A1, A2 |
+| FM-05 | Gate series / GPIO | GPIO stuck high (ESP32 damaged) | Same as FM-01 | 4 | Same as FM-01 | Same as FM-01 | Same as FM-01 |
 | FM-06 | TCO | Mounted too far from PTC / poor thermal contact | Doesn't trip in time; L5 ineffective | 4 | None | C: verify TCO placement and that its rating sits above `outlet_max` and normal fin temps but below duct material limits | **GAP** – A5 |
 | FM-07 | TCO | Nuisance trip (rating too close to normal temps) | Heater channel dead until TCO replaced | 2 | `F_NO_HEAT` | Choose rating from commissioning fin-temp data | OK |
 | FM-08 | Fuse | Wrong rating (too high) | Wiring overheats before fuse blows | 4 | None | Rate fuses to the wire gauge, not just the load; C: check ratings vs. 04-wiring | OK (design) |
 | FM-09 | High-current connectors / crimps | High-resistance joint | Connector heats locally; fuse does **not** see this | 4 | None | Proper crimps / ferrules, rated connectors; C: touch/IR check of every joint after 30 min at full load | **GAP** – A6 |
 | FM-10 | PTC element | Internal short | Fuse blows | 2 | `F_NO_HEAT` | L6 | OK |
 | FM-11 | PTC element | Degrades (lower output) | Slower heat-up | 2 | `F_NO_HEAT` if severe | – | OK |
+| FM-12 | Master relay K1 | Contacts welded closed | L7 lost; latent until a MOSFET also fails | 3 | None while MOSFETs work | K1 only switches with the gates low (no arcing); TCO still in place | Accepted (latent, low likelihood) |
+| FM-13 | K1 driver (BC337) / GPIO17 | Shorted or stuck high | K1 always closed; L7 lost | 3 | None | 10 kΩ pull-down; TCO still in place | Accepted (latent) |
+| FM-14 | Master relay K1 | Coil open / contacts never close | Heaters never heat | 2 | `F_NO_HEAT` | – | OK |
+| FM-15 | K1 flyback diode | Missing or open | Coil kickback damages BC337 → FM-13 | 3 | None | 1N4007 across the coil; C: check polarity | OK (design) |
 
 ## 2. Airflow (fans)
 
@@ -50,12 +54,14 @@ pull-downs · `L5` thermal cutoff (TCO) · `L6` electrical fuses ·
 |---|---|---|---|---|---|---|---|
 | FM-20 | Fan | Stalls / bearing seized | Reduced airflow; with series fans, the other still moves air | 3 | `F_FAN_STALL` (RPM < `min_rpm` > 2 s) | Heaters off, other fan to 100 % | OK |
 | FM-21 | Fan tach wire | Broken / disconnected | Tach reads 0 → false stall | 2 | `F_FAN_STALL` (fails safe) | – | OK |
-| FM-22 | Fan tach line | Noise / crosstalk counted as pulses | **Stalled fan reads as spinning**; interlock defeated | 4 | None | 10 kΩ pull-up + 100 nF filter, glitch filter in PCNT, plausibility check (RPM must be consistent with commanded PWM; RPM above fan max → invalid) | **GAP** – A7 |
+| FM-22 | Fan tach line | Noise / crosstalk counted as pulses | **Stalled fan reads as spinning**; interlock defeated | 4 | None | 10 kΩ pull-up + 10 nF filter, glitch filter in PCNT, plausibility check (RPM must be consistent with commanded PWM; RPM above fan max → invalid) | **GAP** – A7 |
 | FM-23 | Fan / duct | Inlet or outlet blocked (RPM normal or high) | Low airflow while tach looks fine | 4 | `F_OUTLET_OVERTEMP` (DS18B20) | L1 (PTC self-limits), L5 | OK – relies on FM-31 being covered |
 | FM-24 | Fan power P-MOSFET | Fails shorted | Fan can't be switched off (always on) | 1 | None needed | – | OK (safe) |
 | FM-25 | Fan power P-MOSFET / NPN | Fails open | Fan off | 3 | `F_FAN_STALL` | – | OK |
 | FM-26 | Fan PWM transistor | Shorted (PWM held low) | Fan at minimum speed or stopped | 3 | `F_FAN_STALL` if below `min_rpm`; otherwise outlet temp | Interlock uses RPM, not commanded PWM | OK |
 | FM-27 | Fan | Air above 70 °C rating | Early fan failure | 2 | – | `dry` max target 65 °C; fans upstream of PTC | OK |
+| FM-28 | Tach filter capacitor | Too large (e.g. 100 nF with 10 kΩ) | Pulses smeared at high RPM; tach reads low or zero → false stall | 2 | `F_FAN_STALL` (fails safe) | 10 nF in the schematic | OK (design) |
+| FM-29 | Fan P-MOSFET gate | Full 12 V on the gate (no divider) | V_GS at the part's ±12 V limit; gate oxide failure → FM-24 or FM-25 | 2 | – | 10 kΩ / 10 kΩ divider, V_GS ≈ −6 V | OK (design) |
 
 ## 3. Sensors
 
@@ -108,8 +114,8 @@ changes behaviour, the relevant doc and an ADR.
 
 | # | Action | Closes | Type |
 |---|---|---|---|
-| A1 | Detect "heat while commanded off": outlet temp rising (or heater current present) with all gates low → new fault `F_HEATER_STUCK` | FM-01, FM-05 | firmware (+ optional current sense) |
-| A2 | Add a firmware-controllable upstream disconnect (relay/contactor or high-side switch) so a stuck MOSFET can actually be cut | FM-01, FM-05 | hardware – decide in schematic phase |
+| A1 | Implement `F_HEATER_STUCK`: outlet temp rising with K1 closed and all gates low (temperature-based, ADR-014). Fault defined in 06-safety.md; needs firmware + unit test | FM-01, FM-05 | firmware |
+| ~~A2~~ | ~~Add a firmware-controllable upstream disconnect~~ **Done in design:** master relay K1 (ADR-013, schematic) | FM-01, FM-05 | hardware |
 | A3 | Pick the heater MOSFET (or driver) with R_DS(on) specified at V_GS = 3.3 V or less; add MOSFET temperature check to commissioning | FM-03 | hardware + C |
 | A4 | Commissioning step: measure gate-to-source resistance (~10 kΩ) on each heater channel before first power-up | FM-04 | C |
 | A5 | Commissioning step: verify TCO placement and rating against measured fin and outlet temps | FM-06 | C |

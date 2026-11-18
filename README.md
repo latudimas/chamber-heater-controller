@@ -36,6 +36,7 @@ as Klipper, a phone, or a script only send high-level commands.
 | [docs/07-klipper-integration.md](docs/07-klipper-integration.md) | How Klipper talks to the controller |
 | [docs/08-commissioning.md](docs/08-commissioning.md) | Bring-up and test plan |
 | [docs/09-fmea.md](docs/09-fmea.md) | Failure modes and effects analysis, open safety actions |
+| [hardware/kicad/](hardware/kicad/) | KiCad schematic ([PDF](hardware/kicad/chamber-heater.pdf)) |
 | [docs/decisions.md](docs/decisions.md) | Decision log (ADR-style) and open questions |
 | [AGENTS.md](AGENTS.md) | Guidance for coding agents working in this repo |
 
