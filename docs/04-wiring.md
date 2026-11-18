@@ -19,6 +19,10 @@ The full schematic is a KiCad project in [`hardware/kicad/`](../hardware/kicad/)
 ([PDF](../hardware/kicad/chamber-heater.pdf)). The sections below summarise it.
 If they disagree, fix both in the same change.
 
+The diagrams in `docs/diagrams/` are simplified explanations, not the design
+source. Regenerate them with `python docs/diagrams/gen_diagrams.py` (needs
+`schemdraw`) when the circuit they show changes.
+
 ## Power distribution
 
 ```
@@ -38,6 +42,8 @@ If they disagree, fix both in the same change.
 
 ## Heater switch (×2)
 
+![Heater channel: K1 contact, fuse, TCO, PTC, low-side MOSFET with gate resistor and pull-down](diagrams/heater-channel.svg)
+
 ```
  GPIO ──[100 Ω]──┬── Gate
                  │           N-MOSFET (logic-level, ≥30 A)
@@ -51,6 +57,8 @@ If they disagree, fix both in the same change.
 - The load is resistive, so no flyback diode is needed.
 
 ## Master heater relay (K1)
+
+![Master relay: BC337 drives the K1 coil with a flyback diode; K1 contact feeds HEAT_12V](diagrams/master-relay.svg)
 
 ```
  +12V ──┬── K1 coil A1          K1 contact 14 ── +12V
