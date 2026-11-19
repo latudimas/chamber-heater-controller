@@ -23,6 +23,7 @@ Lightweight ADRs. Append new decisions; supersede old ones rather than editing t
 | ADR-017 | Build v1 on perfboard, no custom PCB | Accepted |
 | ADR-018 | Duct v1: printed cold side, metal hot side, floor-standing | Proposed (draft) |
 | ADR-019 | Fans side by side in one shared tunnel, no backflow flaps; heat needs both fans | Accepted |
+| ADR-020 | Heater channel fuses 15 A | Accepted |
 
 ---
 
@@ -129,6 +130,11 @@ Lightweight ADRs. Append new decisions; supersede old ones rather than editing t
 **Why:** Shorter unit; the fan outlet matches the wide PTC face better; simpler than flaps for a first build.
 **Cost:** No redundancy: losing one fan stops heating (safely). Backflow flaps (FMEA A16) are the planned improvement that would allow 1-fan operation.
 **Model:** `spec/HeaterSafety.tla` requires both fans for any gate (`InvAirflow`, `InvHeatHasAirflow`); a mutant that allows one fan is caught.
+
+### ADR-020: Heater channel fuses 15 A
+**Context:** The docs said 10–12 A per heater. Blade fuses come in 10 A or 15 A, not 12 A. Each heater runs at ~8.3 A, with ~12.5 A for a few seconds from cold.
+**Decision:** 15 A blade fuse per heater channel (F2, F3). Main fuse stays 25 A, fans + logic 3 A.
+**Why:** The fuse's job is to protect the 14 AWG silicone wire against a short, which 15 A does. Overheating is handled by the TCO, K1 and the firmware, not the fuse. A 10 A fuse would run at 83 % of its rating and take a 125 % overload on every cold start, risking nuisance blows (and the temptation to fit a bigger fuse without thinking).
 
 ---
 

@@ -2,6 +2,9 @@
 
 ## Bill of materials
 
+This is the design-level list. The full shopping list with quantities, part
+references and perfboard/duct hardware is [`hardware/BOM.md`](../hardware/BOM.md).
+
 | # | Part | Qty | Notes |
 |---|---|---|---|
 | 1 | ESP32-WROOM-32 dev board | 1 | Classic ESP32 (not S3/C6). USB via on-board CP2102/CH340. |
@@ -15,7 +18,7 @@
 | 9 | DS18B20 (wired probe) | 1 | Heater outlet temperature, 1-Wire. Max 125 °C. |
 | 9a | 12 V automotive relay (master heater relay K1) | 1 | 30/40 A contacts, ~150 mA coil. Driven by a BC337 + 1N4007 flyback diode. See ADR-013. |
 | 10 | Thermal cutoff fuse, one-shot | 2 | One in series with each heater. ~100–120 °C, mounted on the duct near the PTC. |
-| 11 | Blade/inline fuse + holder | 4 | ~10–12 A per heater channel, ~20–25 A main, 3 A for fans + logic. |
+| 11 | Blade/inline fuse + holder | 4 | 15 A per heater channel (ADR-020), 25 A main, 3 A for fans + logic. |
 | 12 | SSD1306 0.96" OLED (I2C) | 1 | Optional local display. |
 | 13 | Rotary encoder with push button | 1 | Optional local control. |
 | 14 | Resistors, capacitors | – | 10 kΩ gate pull-downs, 100 Ω gate series, 10 kΩ tach pull-ups, 10 nF tach filters, 4.7 kΩ 1-Wire pull-up, 470 Ω relay base. Full list in the schematic. |

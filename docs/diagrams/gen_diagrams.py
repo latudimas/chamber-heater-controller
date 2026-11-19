@@ -20,7 +20,7 @@ def heater_channel():
         elm.Vdd().label("+12 V")
         k1 = elm.Switch().down().label("K1 contact\n(master relay)", loc="bottom")
         elm.Line().down().length(0.5).label("HEAT_12V", loc="bottom", ofst=0.1)
-        elm.Fuse().down().label("F2  12 A", loc="bottom")
+        elm.Fuse().down().label("F2  15 A", loc="bottom")
         elm.Dot()
         elm.Line().right().length(1.5).label("J2 pin 1", loc="right")
         elm.Line().left().length(1.5)

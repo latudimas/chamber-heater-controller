@@ -6060,7 +6060,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "F 12A"
+		(property "Value" "F 15A"
 			(at 120.65 118.11 0)
 			(effects
 				(font
@@ -6741,7 +6741,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "F 12A"
+		(property "Value" "F 15A"
 			(at 196.85 118.11 0)
 			(effects
 				(font

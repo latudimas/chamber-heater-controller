@@ -26,8 +26,8 @@ source. Regenerate them with `python docs/diagrams/gen_diagrams.py` (needs
 ## Power distribution
 
 ```
- PSU +12V ──[F_main 20–25 A]──┬──[K1 relay]── HEAT_12V ──┬──[F_h1 10–12 A]──[TCO_1]── H1 (+)   H1 (−) ── Q_H1 drain
-                              │                          └──[F_h2 10–12 A]──[TCO_2]── H2 (+)   H2 (−) ── Q_H2 drain
+ PSU +12V ──[F_main 25 A]─────┬──[K1 relay]── HEAT_12V ──┬──[F_h1 15 A]─────[TCO_1]── H1 (+)   H1 (−) ── Q_H1 drain
+                              │                          └──[F_h2 15 A]─────[TCO_2]── H2 (+)   H2 (−) ── Q_H2 drain
                               └──[F_aux 3 A]── 12V_AUX ──┬── Q_F1 (P-MOSFET) ── F1 red    F1 black ── GND
                                                          ├── Q_F2 (P-MOSFET) ── F2 red    F2 black ── GND
                                                          └── buck 12→5 V ── ESP32 5V/VIN
@@ -37,6 +37,7 @@ source. Regenerate them with `python docs/diagrams/gen_diagrams.py` (needs
 - **K1 feeds the heaters only.** Fans and logic come from `12V_AUX` so they keep running in `COOLDOWN` and `FAULT`.
 
 - 12 AWG from the PSU to the distribution point, 14 AWG per heater.
+- Fuses protect the **wiring** against shorts; overheating is handled by the TCO, K1 and the firmware. Heater fuses are 15 A (8.3 A running, ~12.5 A cold start): see ADR-020.
 - TCO = thermal cutoff (one-shot), mounted on the duct next to each PTC.
 - Keep the heater return current off the ESP32 ground trace: use a star point at the PSU.
 
