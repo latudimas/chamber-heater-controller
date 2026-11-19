@@ -77,7 +77,7 @@ fault detected
 
 ## Things to verify in commissioning
 
-- Measure fin and outlet temperatures with 1 fan, 2 fans, and reduced PWM. This sets `outlet_max`, `min_fan_pwm_*`, and whether 1-fan + 2-heater is allowed.
+- Measure fin and outlet temperatures with both fans at full and reduced PWM. This sets `outlet_max` and `min_fan_pwm`. (1-fan heating is not allowed: ADR-019.)
 - Pull a fan connector while heating → expect `F_FAN_STALL` within 2 s.
 - Unplug each sensor → expect `F_SENSOR`.
 - Hold the firmware in a loop (test build) → expect a watchdog reset with outputs off.

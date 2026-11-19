@@ -13,9 +13,12 @@ mutants=(
   "CLEAR allowed while the outlet is hot|s/^    \/\\\\ outCool$/    \/\\\\ TRUE/"
   # Airflow is guarded twice (interlock filter AND F_FAN_STALL), so each
   # alone is an equivalent mutant. Removing both must be caught.
-  "no airflow interlock and no fan-stall fault|s/h1      == want1 \/\\\\ okHeat \/\\\\ air1/h1      == want1 \/\\\\ okHeat/; s/state \\\\in {\"CHECK\", \"RUN\"} \/\\\\ ~(fanOk1' \/\\\\ fanOk2')/FALSE/"
+  "no airflow interlock and no fan-stall fault|s/h1      == want1 \/\\\\ okHeat \/\\\\ air$/h1      == want1 \/\\\\ okHeat/; s/state \\\\in {\"CHECK\", \"RUN\"} \/\\\\ ~(fanOk1' \/\\\\ fanOk2')/FALSE/"
   "no stuck-heater detection|s/relay \/\\\\ ~g1 \/\\\\ ~g2 \/\\\\ shorted             -> \"F_HEATER_STUCK\"/FALSE -> \"F_HEATER_STUCK\"/"
-  "no stagger for H2|s/air2 \/\\\\ g1prev \/\\\\ h1/air2/"
+  "no stagger for H2|s/air \/\\\\ g1prev \/\\\\ h1/air/"
+  # Without backflow flaps one fan is not enough (ADR-019): allowing heat on
+  # one fan, and faulting only when both stop, must be caught.
+  "heat allowed on one fan|s/        air     == fanOk1' \/\\\\ fanOk2'/        air     == fanOk1' \\\\\/ fanOk2'/; s/~(fanOk1' \/\\\\ fanOk2')/~(fanOk1' \\\\\/ fanOk2')/"
   "fans not forced on in FAULT while hot|s/(s = \"FAULT\" \/\\\\ ~outCool')/FALSE/"
   "START accepts any target|s/IF ValidTarget(t)$/IF TRUE/"
   "fault can be cleared with its cause present|s/~CausePresent(code)$/TRUE/"

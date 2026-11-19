@@ -13,10 +13,9 @@
           chamber air
               │
               ▼
-   ┌──────────────────────┐
-   │  F1  (Nidec 40×28)   │   fans stacked in series (push-push)
-   │  F2  (Nidec 40×28)   │   → either fan alone still moves air
-   ├──────────────────────┤
+   ┌──────────┬───────────┐
+   │ F1 40×28 │ F2 40×28  │   fans side by side, one shared tunnel
+   ├──────────┴───────────┤   (no backflow flaps: both must run to heat)
    │  H1 PTC  │  H2 PTC   │   both grills across one shared channel
    ├──────────────────────┤
    │  DS18B20 outlet probe│
@@ -27,9 +26,12 @@
    SHT40 elsewhere in the chamber, ~print height
 ```
 
-Fans are stacked in series rather than side by side. With a shared plenum, a
-stopped fan would let air from the running fan leak back out, and flow to the
-PTCs would collapse. See ADR-007.
+The fans sit side by side and feed one shared tunnel, so either fan can blow
+across both PTCs. There are no backflow flaps yet: if one fan stops, the other
+fan's air leaks back out through it and the flow over the PTCs collapses.
+Therefore **any heating needs both fans running**, and a stall of either fan
+stops both heaters. Backflow flaps, which would allow 1-fan operation, are a
+planned improvement. See ADR-019 (supersedes ADR-007).
 
 ## Logical architecture
 
@@ -112,8 +114,11 @@ Cold PTCs draw ~1.5× running current. Two together is ~25–30 A, which is abov
 | Heaters requested | Required |
 |---|---|
 | 0 | none |
-| 1 | ≥ 1 fan running at ≥ `min_fan_pwm_1h` and RPM ≥ `min_rpm` |
-| 2 | 2 fans running at ≥ `min_fan_pwm_2h` and RPM ≥ `min_rpm` (1-fan + 2-heater only if validated in commissioning and enabled in config) |
+| 1 or 2 | **both** fans powered, at ≥ `min_fan_pwm`, and both tachs ≥ `min_rpm` |
+
+One fan is never enough while heating (shared tunnel without backflow flaps,
+ADR-019). A `START` asking for heat with `fans=1` is refused with `E_INTERLOCK`;
+a stall of either fan while heating latches `F_FAN_STALL`.
 
 These are checked when a command is accepted **and** continuously while running.
 The outlet temperature (`outlet_max`) is the backstop when the fan numbers are

@@ -10,7 +10,7 @@ Lightweight ADRs. Append new decisions; supersede old ones rather than editing t
 | ADR-004 | ESP32 (WROOM-32) instead of RP2040 | Accepted |
 | ADR-005 | MOSFET switching instead of relay / SSR | Accepted |
 | ADR-006 | PID with split-range + staggered start | Accepted |
-| ADR-007 | Shared airflow channel, fans stacked in series | Accepted |
+| ADR-007 | Shared airflow channel, fans stacked in series | Superseded by ADR-019 |
 | ADR-008 | Digital sensors only (SHT40, DS18B20) | Accepted |
 | ADR-009 | No auto-resume after reboot | Accepted |
 | ADR-010 | Mode profiles: heater / dry / vent | Accepted |
@@ -21,6 +21,8 @@ Lightweight ADRs. Append new decisions; supersede old ones rather than editing t
 | ADR-015 | Schematic in KiCad (`hardware/kicad/`) | Accepted |
 | ADR-016 | Formal verification: TLA+ model of the safety state machine now, CBMC on the C later; Nix dev shell | Accepted |
 | ADR-017 | Build v1 on perfboard, no custom PCB | Accepted |
+| ADR-018 | Duct v1: printed cold side, metal hot side, floor-standing | Proposed (draft) |
+| ADR-019 | Fans side by side in one shared tunnel, no backflow flaps; heat needs both fans | Accepted |
 
 ---
 
@@ -115,6 +117,19 @@ Lightweight ADRs. Append new decisions; supersede old ones rather than editing t
 **Why:** Fast to build and change; avoids designing high-current PCB traces.
 **Revisit:** after commissioning. The KiCad schematic carries over to a PCB if one is wanted; heater current would still stay off the board.
 
+### ADR-018: Duct v1 layout and materials (proposed)
+**Context:** Fin temperatures can exceed what printed plastic tolerates. The unit stands on the shelter floor next to the printer. Parts are printed on an Ender-3 V3 KE (220 × 220) and the metal is cut by hand from scrap.
+**Decision:** Air path: guard → 2 fans side by side (ADR-019) → printed taper (77 × 37 → 60 × 60) → silicone gasket → flat metal plate holding both PTCs by their tabs (windows = fin area, so no bypass) → bent sheet-metal outlet box. Plastic only upstream of the gasket. 4 M3 bolts clamp flange, gasket, plate and box tabs. The transition has its own feet. Design: `hardware/duct/` (SolidCraft, parametric) with 1:1 templates for the metal parts.
+**Why:** The hot zone is metal only; the flat plate and simple bent box suit hand fabrication; one print, no supports.
+**Open:** PTC sizes come from the previous project's 220 V 50 W heater, not the 12 V 100 W heaters this controller is designed for. The fin window, tab position and fan screw pitch are estimates. Status stays *Proposed* until those are measured and a cold fit passes.
+
+### ADR-019: Fans side by side in a shared tunnel (supersedes ADR-007)
+**Context:** Stacking the fans (ADR-007) makes the unit longer and feeds a wide PTC face through a small 40 × 40 opening. The owner wants the fans side by side, with either fan able to blow across both PTCs.
+**Decision:** Both fans sit side by side (80 × 40) and feed one shared tunnel in front of both PTCs. No backflow flaps in v1. Because a stopped fan lets the other fan's air leak back out, **any heating requires both fans running**; a stall of either fan latches `F_FAN_STALL` and stops both heaters. `START` with heat and `fans=1` returns `E_INTERLOCK`.
+**Why:** Shorter unit; the fan outlet matches the wide PTC face better; simpler than flaps for a first build.
+**Cost:** No redundancy: losing one fan stops heating (safely). Backflow flaps (FMEA A16) are the planned improvement that would allow 1-fan operation.
+**Model:** `spec/HeaterSafety.tla` requires both fans for any gate (`InvAirflow`, `InvHeatHasAirflow`); a mutant that allows one fan is caught.
+
 ---
 
 ## Open questions
@@ -122,10 +137,10 @@ Lightweight ADRs. Append new decisions; supersede old ones rather than editing t
 - Firmware framework (ADR-012).
 - Fan wire colours, confirmed with a multimeter.
 - Which printer goes inside the shelter (sets the heater-mode `max_target`).
-- Exact PTC part and its size compared with the duct cross-section.
-- Duct material near the PTC.
+- Exact PTC part and its size compared with the duct cross-section. Duct v1 uses the previous project's 220 V 50 W PTC dimensions as placeholders; confirm the 12 V 100 W parts (see `hardware/duct/README.md` → Verify first).
+- Duct material near the PTC: proposed in ADR-018 (metal hot side, silicone gasket); confirm with commissioning temperatures.
 - Dry-mode vent: passive hole vs exhaust fan vs servo flap.
-- Whether `2 heaters + 1 fan` is allowed (depends on commissioning data).
+- Backflow flaps (FMEA A16) to allow heating on one fan; until then any heating needs both fans (ADR-019).
 - Heater MOSFET: is the IRLB8721 fully on at a 3.3 V gate, or is a gate driver needed? (FMEA A3)
 - `F_HEATER_STUCK` thresholds: outlet rise and time window (set in commissioning).
 - A watchdog reset loses the latched fault (RAM) and switches the fans off even if the outlet is hot. Persist the fault code across resets (RTC memory / NVS), and run the fans at boot while the outlet is hot? (Found while modelling; the TLA+ `Reboot` action currently assumes power-loss behaviour.)

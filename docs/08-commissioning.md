@@ -31,14 +31,16 @@ For each combination, run 10 min at 100 % heater duty and record the outlet and 
 
 | Heaters | Fans | Fan PWM | Outlet °C | Fin °C | OK? |
 |---|---|---|---|---|---|
-| 1 | 1 | 100 | | | |
-| 1 | 1 | 50 | | | |
 | 1 | 2 | 100 | | | |
+| 1 | 2 | 50 | | | |
 | 2 | 2 | 100 | | | |
 | 2 | 2 | 70 | | | |
-| 2 | 1 | 100 | | | (only if safe) |
 
-→ Set `outlet_max`, `min_fan_pwm_1h`, `min_fan_pwm_2h`, and whether `2 heaters + 1 fan` is allowed.
+→ Set `outlet_max` and `min_fan_pwm`.
+
+Backflow check (**heaters off**): run one fan only and feel the stopped fan's
+face. Air coming back out of it confirms why 1-fan heating is not allowed
+(ADR-019). Repeat this check after backflow flaps are fitted.
 
 ## 5. Safety tests (firmware)
 

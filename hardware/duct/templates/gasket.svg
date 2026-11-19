@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="148.0mm" height="134.0mm" viewBox="-12 -12 148.0 134.0">
+<style>.cut{fill:none;stroke:#000;stroke-width:0.3}.bend{fill:none;stroke:#c00;stroke-width:0.3;stroke-dasharray:3 2}.cl{stroke:#08f;stroke-width:0.15;stroke-dasharray:6 2 1 2}text{font:3px sans-serif;fill:#000}</style>
+<rect class="cut" x="0" y="0" width="124.0" height="80.0"/>
+<rect class="cut" x="32.0" y="10.0" width="60.0" height="60.0"/>
+<circle class="cut" cx="118.0" cy="10.0" r="1.7"/><line class="cl" x1="114.6" y1="10.0" x2="121.4" y2="10.0"/><line class="cl" x1="118.0" y1="6.6" x2="118.0" y2="13.4"/>
+<circle class="cut" cx="103.0" cy="21.75" r="4.0"/><line class="cl" x1="95.0" y1="21.75" x2="111.0" y2="21.75"/><line class="cl" x1="103.0" y1="13.75" x2="103.0" y2="29.75"/>
+<circle class="cut" cx="6.0" cy="10.0" r="1.7"/><line class="cl" x1="2.6" y1="10.0" x2="9.4" y2="10.0"/><line class="cl" x1="6.0" y1="6.6" x2="6.0" y2="13.4"/>
+<circle class="cut" cx="21.0" cy="21.75" r="4.0"/><line class="cl" x1="13.0" y1="21.75" x2="29.0" y2="21.75"/><line class="cl" x1="21.0" y1="13.75" x2="21.0" y2="29.75"/>
+<circle class="cut" cx="118.0" cy="70.0" r="1.7"/><line class="cl" x1="114.6" y1="70.0" x2="121.4" y2="70.0"/><line class="cl" x1="118.0" y1="66.6" x2="118.0" y2="73.4"/>
+<circle class="cut" cx="103.0" cy="58.25" r="4.0"/><line class="cl" x1="95.0" y1="58.25" x2="111.0" y2="58.25"/><line class="cl" x1="103.0" y1="50.25" x2="103.0" y2="66.25"/>
+<circle class="cut" cx="6.0" cy="70.0" r="1.7"/><line class="cl" x1="2.6" y1="70.0" x2="9.4" y2="70.0"/><line class="cl" x1="6.0" y1="66.6" x2="6.0" y2="73.4"/>
+<circle class="cut" cx="21.0" cy="58.25" r="4.0"/><line class="cl" x1="13.0" y1="58.25" x2="29.0" y2="58.25"/><line class="cl" x1="21.0" y1="50.25" x2="21.0" y2="66.25"/>
+<line class="cut" x1="0" y1="88.0" x2="50" y2="88.0"/><line class="cut" x1="0" y1="86.0" x2="0" y2="90.0"/><line class="cut" x1="50" y1="86.0" x2="50" y2="90.0"/><text x="52" y="89.0">50 mm: check with a ruler before cutting</text>
+<text x="0" y="95.0">Gasket: high-temperature silicone sheet (or ceramic-fibre paper), ~3 mm.</text>
+<text x="0" y="100.0">Window 60 x 60 = printed duct outlet. 8 mm holes clear the PTC tab nuts.</text>
+<text x="0" y="105.0">Thermal break between the printed flange and the metal plate.</text>
+</svg>

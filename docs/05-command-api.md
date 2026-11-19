@@ -39,7 +39,7 @@ ERR <code> <message>
 |---|---|
 | `E_BUSY` | already running; use `SET` or `STOP` |
 | `E_RANGE` | value outside the mode profile limits |
-| `E_INTERLOCK` | heater/fan combination not allowed |
+| `E_INTERLOCK` | heater/fan combination not allowed (any heating needs `fans=2`, ADR-019) |
 | `E_FAULT` | controller is in `FAULT`; `CLEAR` first |
 | `E_ARGS` | unknown or missing argument |
 | `E_SENSOR` | required sensor unavailable |
@@ -69,7 +69,7 @@ When faulted: `"state": "FAULT", "fault": { "code": "F_OUTLET_OVERTEMP", "at": 1
 ```
 START mode=heater target=45 heaters=2 fans=2
 START mode=dry preset=PETG
-START mode=dry target=50 duration=240 heaters=1 fans=1 fan=60
+START mode=dry target=50 duration=240 heaters=1 fans=2 fan=60
 START mode=vent duration=10
 SET duration=+30
 STOP

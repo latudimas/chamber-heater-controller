@@ -52,7 +52,7 @@ pull-downs · `L5` thermal cutoff (TCO) · `L6` electrical fuses · `L7` master 
 
 | ID | Item | Failure mode | Effect | Sev | Detection | Mitigation | Status |
 |---|---|---|---|---|---|---|---|
-| FM-20 | Fan | Stalls / bearing seized | Reduced airflow; with series fans, the other still moves air | 3 | `F_FAN_STALL` (RPM < `min_rpm` > 2 s) | Heaters off, other fan to 100 % | OK |
+| FM-20 | Fan | Stalls / bearing seized | Fans share one tunnel with no backflow flaps: the other fan's air leaks back out through the stopped fan and flow over the PTCs collapses | 4 | `F_FAN_STALL` (RPM < `min_rpm` > 2 s) | Any heating needs both fans; a stall of either stops both heaters (ADR-019). Backflow flaps planned (A16) | OK |
 | FM-21 | Fan tach wire | Broken / disconnected | Tach reads 0 → false stall | 2 | `F_FAN_STALL` (fails safe) | – | OK |
 | FM-22 | Fan tach line | Noise / crosstalk counted as pulses | **Stalled fan reads as spinning**; interlock defeated | 4 | None | 10 kΩ pull-up + 10 nF filter, glitch filter in PCNT, plausibility check (RPM must be consistent with commanded PWM; RPM above fan max → invalid) | **GAP** – A7 |
 | FM-23 | Fan / duct | Inlet or outlet blocked (RPM normal or high) | Low airflow while tach looks fine | 4 | `F_OUTLET_OVERTEMP` (DS18B20) | L1 (PTC self-limits), L5 | OK – relies on FM-31 being covered |
@@ -129,6 +129,7 @@ changes behaviour, the relevant doc and an ADR.
 | A13 | Multi-task watchdog check-in | FM-51 | firmware |
 | A14 | Config CRC + range check on load | FM-53 | firmware |
 | A15 | Optional auth for HTTP/MQTT | FM-61 | firmware (low) |
+| A16 | Backflow flaps on each fan, so one fan can carry the heaters; then add FMEA rows for a flap stuck open/closed | FM-20 | hardware (improvement) |
 
 Firmware actions (A1, A7–A9, A11, A13, A14) add fault paths. Per
 [AGENTS.md](../AGENTS.md), each needs a unit test that triggers it and asserts

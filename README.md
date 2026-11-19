@@ -13,7 +13,7 @@ as Klipper, a phone, or a script only send high-level commands.
 |---|---|
 | MCU | ESP32-WROOM-32 (classic ESP32) |
 | Heaters | 2 × 12 V 100 W PTC, independently switched |
-| Fans | 2 × Nidec W40S12BS4A5-07 (40×28 mm, 12 V, 0.73 A, 4-wire PWM + tach), stacked in series in one duct |
+| Fans | 2 × Nidec W40S12BS4A5-07 (40×28 mm, 12 V, 0.73 A, 4-wire PWM + tach), side by side in one shared tunnel (both required for heat, ADR-019) |
 | Airflow | Single shared channel: chamber air → fans → PTC grills → chamber |
 | PSU | 12 V 24 A |
 | Sensors | SHT40 (chamber temp + RH), DS18B20 (heater outlet) |
@@ -36,6 +36,7 @@ as Klipper, a phone, or a script only send high-level commands.
 | [docs/07-klipper-integration.md](docs/07-klipper-integration.md) | How Klipper talks to the controller |
 | [docs/08-commissioning.md](docs/08-commissioning.md) | Bring-up and test plan |
 | [docs/09-fmea.md](docs/09-fmea.md) | Failure modes and effects analysis, open safety actions |
+| [hardware/duct/](hardware/duct/README.md) | Duct v1 draft: printed + sheet-metal parts, STL/STEP, cutting templates |
 | [hardware/kicad/](hardware/kicad/) | KiCad schematic ([PDF](hardware/kicad/chamber-heater.pdf)) |
 | [spec/](spec/README.md) | TLA+ model of the safety state machine |
 | [docs/decisions.md](docs/decisions.md) | Decision log (ADR-style) and open questions |

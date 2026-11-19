@@ -25,11 +25,11 @@ make -C spec mutants   # break the design on purpose; every mutant must be caugh
 
 | Check | Safety doc |
 |---|---|
-| `InvAirflow`: a gate is on only with the airflow the interlock requires | invariant 2 |
+| `InvAirflow`: a gate is on only with both fans running (shared tunnel, ADR-019) | invariant 2 |
 | `InvSensorsOutlet`: no gate on with bad sensors or a hot outlet | 3, 4 |
 | `InvStagger`: H2 never on without H1 | staggered start |
 | `InvGatesNeedRelay`, `InvRelayOnlyHeating` | 9 |
-| `InvHeatOnlyWhenHeating`, `InvHeatHasAirflow`: even with a shorted MOSFET, heat flows only while heating, with airflow | layer 7 (K1) |
+| `InvHeatOnlyWhenHeating`, `InvHeatHasAirflow`: even with a shorted MOSFET, heat flows only while heating, with both fans | layer 7 (K1) |
 | `InvCooldownFans`, `PropFansStopCool`: fans run until the outlet is cool | 5 |
 | `InvTarget`: mode limits | 8 |
 | `PropLatched`: `FAULT` is left only by `CLEAR` (cause gone) or reboot | 6 |

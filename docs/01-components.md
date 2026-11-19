@@ -6,7 +6,7 @@
 |---|---|---|---|
 | 1 | ESP32-WROOM-32 dev board | 1 | Classic ESP32 (not S3/C6). USB via on-board CP2102/CH340. |
 | 2 | 12 V 100 W PTC air heater (finned) | 2 | Face sized to the duct. Prefer ceramic/aluminium frame. |
-| 3 | Nidec W40S12BS4A5-07 fan | 2 | 40×40×28 mm, 12 V, 0.73 A, 4-wire (PWM + tach). Stacked in series. |
+| 3 | Nidec W40S12BS4A5-07 fan | 2 | 40×40×28 mm, 12 V, 0.73 A, 4-wire (PWM + tach). Side by side in one shared tunnel (ADR-019). |
 | 4 | 12 V 24 A PSU | 1 | Mounted **outside** the enclosure. Earthed. |
 | 5 | Logic-level N-MOSFET (heater switch) | 2 | Fully on at V_GS ≤ 3.3 V (e.g. IRLB8721, IRLR7843) **or** a gate driver stage. ≥ 30 A rating, low R_DS(on). |
 | 6 | P-MOSFET + NPN driver (fan power cut) | 2 | High-side so the tach ground reference stays intact. e.g. AO3401A + BC547, with a gate divider (V_GS ±12 V limit). |
@@ -21,7 +21,7 @@
 | 14 | Resistors, capacitors | – | 10 kΩ gate pull-downs, 100 Ω gate series, 10 kΩ tach pull-ups, 10 nF tach filters, 4.7 kΩ 1-Wire pull-up, 470 Ω relay base. Full list in the schematic. |
 | 14a | 12 V → 5 V buck module | 1 | ≥ 1 A. Powers the ESP32 dev board. |
 | 15 | Wire | – | 12 AWG main 12 V run, 14 AWG per heater, 22–24 AWG signals. |
-| 16 | Duct | 1 | High-temp material near the PTC (metal / standoffs); printed parts kept clear of fins. |
+| 16 | Duct | 1 | Draft v1 in [`hardware/duct/`](../hardware/duct/README.md): printed ASA cold side, sheet-metal hot side, silicone gasket between (ADR-018). |
 | 17 | Vent (dry mode) | 1 | Optional small exhaust fan or servo flap to purge moist air. |
 
 ## Component notes

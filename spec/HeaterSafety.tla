@@ -56,9 +56,10 @@ ValidTarget(t) == t \in MinT..MaxT
 \* Is heat actually being produced? A shorted MOSFET heats whenever K1 is closed.
 Energized == relay /\ (g1 \/ g2 \/ shorted)
 
-\* Airflow the interlock requires for one / two heaters.
-Air1 == (f1 /\ fanOk1) \/ (f2 /\ fanOk2)
-Air2 == f1 /\ fanOk1 /\ f2 /\ fanOk2
+\* Airflow the interlock requires. The fans sit side by side in one shared
+\* tunnel with no backflow flaps (ADR-019): a stopped fan lets the other fan's
+\* air leak back out, so ANY heat needs both fans powered and turning.
+Air == f1 /\ fanOk1 /\ f2 /\ fanOk2
 
 \* Is the cause of a latched fault still present (for CLEAR)?
 \* A shorted MOSFET can't be observed with K1 open; the CHECK phase of the
@@ -77,11 +78,10 @@ CausePresent(c) ==
 
 SetOutputs(s, want1, want2) ==
     LET fans    == s \in Heating \/ s = "COOLDOWN" \/ (s = "FAULT" /\ ~outCool')
-        air1    == fanOk1' \/ fanOk2'
-        air2    == fanOk1' /\ fanOk2'
+        air     == fanOk1' /\ fanOk2'
         okHeat  == s = "RUN" /\ sensOk' /\ ~outHot'
-        h1      == want1 /\ okHeat /\ air1
-        h2      == want2 /\ okHeat /\ air2 /\ g1prev /\ h1
+        h1      == want1 /\ okHeat /\ air
+        h2      == want2 /\ okHeat /\ air /\ g1prev /\ h1
     IN  /\ f1' = fans
         /\ f2' = fans
         /\ relay' = (s \in {"CHECK", "RUN"})
@@ -186,8 +186,8 @@ TypeOK ==
     /\ state \in States /\ code \in Codes
     /\ {relay, g1, g2, f1, f2, g1prev} \subseteq BOOLEAN
 
-\* (2) No heater gate on without the airflow the interlock requires.
-InvAirflow == (g1 => Air1) /\ (g2 => Air2)
+\* (2) No heater gate on without both fans (shared tunnel, ADR-019).
+InvAirflow == (g1 \/ g2) => Air
 
 \* (3)(4) No heater gate on with bad sensors or a hot outlet.
 InvSensorsOutlet == (g1 \/ g2) => (sensOk /\ ~outHot)
@@ -201,7 +201,7 @@ InvRelayOnlyHeating == relay => state \in {"CHECK", "RUN"}
 
 \* Even with a shorted MOSFET, heat flows only while heating, with airflow.
 InvHeatOnlyWhenHeating == Energized => state \in {"CHECK", "RUN"}
-InvHeatHasAirflow == Energized => Air1
+InvHeatHasAirflow == Energized => Air
 
 \* (5) Fans run in COOLDOWN, and in FAULT while the outlet is hot.
 InvCooldownFans == (state = "COOLDOWN" \/ (state = "FAULT" /\ ~outCool)) => (f1 /\ f2)

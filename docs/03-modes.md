@@ -59,8 +59,7 @@ static const ModeProfile MODE_DRY = {
   .timer_required    = true,
   .max_duration_s    = 12 * 3600,
   .fan_duty_pct      = 60,
-  .min_fan_pwm_1h    = 50,
-  .min_fan_pwm_2h    = 70,
+  .min_fan_pwm       = 50,    // both fans, any heating (ADR-019); tune in commissioning
   .outlet_max_c      = 95.0f,   // tune in commissioning
   .humidity_active   = true,
 };
