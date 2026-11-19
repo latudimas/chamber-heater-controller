@@ -38,11 +38,12 @@ Per-component failure modes, how each is detected, and the open gaps are in
 
 ## Formal model
 
-The state machine and invariants 2–9 are model-checked with TLA+ in
+The state machine and invariants 1–9 are model-checked with TLA+ in
 [`spec/`](../spec/README.md) (`make -C spec check`). The model also shows
 that, with K1, a heater MOSFET that fails shorted can only produce heat while
 heating with airflow, and is cut within one tick of being commanded off.
-Hardware layers 1, 3–6 are outside the model.
+Hardware layers 1, 3–6 are outside the model. The workflow from these rules to
+the model and the code is in [10-verification.md](10-verification.md).
 
 ## Fault codes
 

@@ -51,6 +51,17 @@ host/                   (future) Klipper macros, shell scripts
 - Hardware-level checks follow `docs/08-commissioning.md`.
 - Any change to the state machine or safety rules must update `spec/HeaterSafety.tla` and keep `make -C spec check` and `make -C spec mutants` passing. The firmware implements the spec, not the other way round.
 
+## Verification flow (formal methods)
+
+Full detail and the traceability table: `docs/10-verification.md`. Read it before touching safety logic.
+
+1. **Order:** `docs/06-safety.md` (words) → `spec/HeaterSafety.tla` (model) → C safety core → unit tests → CBMC. Never change the C first and fit the spec to it.
+2. **Model check:** `make -C spec check` passes; every new property gets a mutant in `spec/check_mutations.sh` and `make -C spec mutants` kills all of them.
+3. **Counterexample = design bug.** Fix the design and docs, or ask. Never weaken or delete a property to make TLC pass.
+4. **Same names in C:** TLA+ `InvFooBar` → `bool inv_foo_bar(const state_t *s)`, `PropFooBar` → `bool prop_foo_bar(const state_t *prev, const state_t *next)`. These are written once and used by the unit tests, the CBMC harness and debug asserts. The C state machine uses the spec's state names; `safety_step()` corresponds to the spec's `Tick` / `SetOutputs`.
+5. **Traceability:** adding, renaming or removing a property updates its row in `docs/10-verification.md` in the same change.
+6. If the docs and the spec disagree, stop and resolve it before writing code.
+
 ## Open decisions
 
 See `docs/decisions.md` → Open questions. Notably the **firmware framework (ADR-012)** is undecided. Don't scaffold a framework-specific project until it's resolved.

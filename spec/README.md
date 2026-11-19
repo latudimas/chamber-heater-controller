@@ -4,6 +4,9 @@
 TLA+. TLC explores every reachable combination of inputs, commands and resets
 and checks the safety invariants from [docs/06-safety.md](../docs/06-safety.md).
 
+How this model connects to the firmware, unit tests and CBMC (workflow,
+naming, traceability table): [docs/10-verification.md](../docs/10-verification.md).
+
 ```bash
 nix develop            # provides tlc, tlasany
 make -C spec check     # model-check (a few seconds)
