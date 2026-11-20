@@ -5,3 +5,6 @@ sdkconfig.old
 secrets.h
 .direnv/
 result
+
+# SolidCraft lock files (created while a design is open)
+.~*.lock
