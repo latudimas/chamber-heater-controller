@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="124.0mm" height="140.0mm" viewBox="-12 -12 124.0 140.0">
+<style>.cut{fill:none;stroke:#000;stroke-width:0.3}.bend{fill:none;stroke:#c00;stroke-width:0.3;stroke-dasharray:3 2}.cl{stroke:#08f;stroke-width:0.15;stroke-dasharray:6 2 1 2}text{font:3px sans-serif;fill:#000}</style>
+<rect class="cut" x="0" y="0" width="100.0" height="86.0"/>
+<rect class="cut" x="9.0" y="13.0" width="82.0" height="60.0"/>
+<circle class="cut" cx="94.0" cy="4.5" r="1.7"/><line class="cl" x1="90.6" y1="4.5" x2="97.4" y2="4.5"/><line class="cl" x1="94.0" y1="1.1" x2="94.0" y2="7.9"/>
+<circle class="cut" cx="91.0" cy="24.75" r="4.0"/><line class="cl" x1="83.0" y1="24.75" x2="99.0" y2="24.75"/><line class="cl" x1="91.0" y1="16.75" x2="91.0" y2="32.75"/>
+<circle class="cut" cx="6.0" cy="4.5" r="1.7"/><line class="cl" x1="2.6" y1="4.5" x2="9.4" y2="4.5"/><line class="cl" x1="6.0" y1="1.1" x2="6.0" y2="7.9"/>
+<circle class="cut" cx="9.0" cy="24.75" r="4.0"/><line class="cl" x1="1.0" y1="24.75" x2="17.0" y2="24.75"/><line class="cl" x1="9.0" y1="16.75" x2="9.0" y2="32.75"/>
+<circle class="cut" cx="94.0" cy="81.5" r="1.7"/><line class="cl" x1="90.6" y1="81.5" x2="97.4" y2="81.5"/><line class="cl" x1="94.0" y1="78.1" x2="94.0" y2="84.9"/>
+<circle class="cut" cx="91.0" cy="61.25" r="4.0"/><line class="cl" x1="83.0" y1="61.25" x2="99.0" y2="61.25"/><line class="cl" x1="91.0" y1="53.25" x2="91.0" y2="69.25"/>
+<circle class="cut" cx="6.0" cy="81.5" r="1.7"/><line class="cl" x1="2.6" y1="81.5" x2="9.4" y2="81.5"/><line class="cl" x1="6.0" y1="78.1" x2="6.0" y2="84.9"/>
+<circle class="cut" cx="9.0" cy="61.25" r="4.0"/><line class="cl" x1="1.0" y1="61.25" x2="17.0" y2="61.25"/><line class="cl" x1="9.0" y1="53.25" x2="9.0" y2="69.25"/>
+<line class="cut" x1="0" y1="94.0" x2="50" y2="94.0"/><line class="cut" x1="0" y1="92.0" x2="0" y2="96.0"/><line class="cut" x1="50" y1="92.0" x2="50" y2="96.0"/><text x="52" y="95.0">50 mm: check with a ruler before cutting</text>
+<text x="0" y="101.0">Gasket: high-temperature silicone sheet (or ceramic-fibre paper), ~3 mm.</text>
+<text x="0" y="106.0">Window 82 x 60 = printed lip opening. 8 mm holes clear the PTC tab nuts.</text>
+<text x="0" y="111.0">Thermal break between the printed shroud and the metal plate.</text>
+</svg>

@@ -24,7 +24,7 @@ references and perfboard/duct hardware is [`hardware/BOM.md`](../hardware/BOM.md
 | 14 | Resistors, capacitors | – | 10 kΩ gate pull-downs, 100 Ω gate series, 10 kΩ tach pull-ups, 10 nF tach filters, 4.7 kΩ 1-Wire pull-up, 470 Ω relay base. Full list in the schematic. |
 | 14a | 12 V → 5 V buck module | 1 | ≥ 1 A. Powers the ESP32 dev board. |
 | 15 | Wire | – | 12 AWG main 12 V run, 14 AWG per heater, 22–24 AWG signals. |
-| 16 | Duct | 1 | Draft v1 in [`hardware/duct/`](../hardware/duct/README.md): printed ASA cold side, sheet-metal hot side, silicone gasket between (ADR-018). |
+| 16 | Duct | 1 | Three draft layouts in [`hardware/duct/`](../hardware/duct/README.md) (horizontal, vertical upflow, folded slab): printed ASA cold side, sheet-metal hot side, silicone gasket between (ADR-018, ADR-021). |
 | 17 | Vent (dry mode) | 1 | Optional small exhaust fan or servo flap to purge moist air. |
 
 ## Component notes

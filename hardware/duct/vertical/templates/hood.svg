@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="228.0mm" height="265.0mm" viewBox="-12 -12 228.0 265.0">
+<style>.cut{fill:none;stroke:#000;stroke-width:0.3}.bend{fill:none;stroke:#c00;stroke-width:0.3;stroke-dasharray:3 2}.cl{stroke:#08f;stroke-width:0.15;stroke-dasharray:6 2 1 2}text{font:3px sans-serif;fill:#000}</style>
+<polygon class="cut" points="54.0,7.0 150.0,7.0 150.0,51.0 204.0,51.0 204.0,142.0 150.0,142.0 150.0,186.0 54.0,186.0 54.0,142.0 0,142.0 0,51.0 54.0,51.0"/>
+<line class="cut" x1="54.0" y1="51.0" x2="54.0" y2="61.0"/>
+<line class="cut" x1="54.0" y1="132.0" x2="54.0" y2="142.0"/>
+<line class="cut" x1="150.0" y1="51.0" x2="150.0" y2="61.0"/>
+<line class="cut" x1="150.0" y1="132.0" x2="150.0" y2="142.0"/>
+<rect class="bend" x="54.0" y="61.0" width="96.0" height="71.0"/>
+<line class="bend" x1="0" y1="61.0" x2="54.0" y2="61.0"/>
+<line class="bend" x1="0" y1="132.0" x2="54.0" y2="132.0"/>
+<line class="bend" x1="150.0" y1="61.0" x2="204.0" y2="61.0"/>
+<line class="bend" x1="150.0" y1="132.0" x2="204.0" y2="132.0"/>
+<rect class="cut" x="58.0" y="134.0" width="88.0" height="24.0"/>
+<text x="60.0" y="146.0">outlet (front)</text>
+<polyline class="cut" points="141.0,7.0 141.0,0.0 151.0,0.0 151.0,7.0"/>
+<line class="bend" x1="141.0" y1="7.0" x2="151.0" y2="7.0"/>
+<circle class="cut" cx="146.0" cy="4.0" r="1.7"/><line class="cl" x1="142.6" y1="4.0" x2="149.4" y2="4.0"/><line class="cl" x1="146.0" y1="0.6000000000000001" x2="146.0" y2="7.4"/>
+<polyline class="cut" points="141.0,186.0 141.0,193.0 151.0,193.0 151.0,186.0"/>
+<line class="bend" x1="141.0" y1="186.0" x2="151.0" y2="186.0"/>
+<circle class="cut" cx="146.0" cy="189.0" r="1.7"/><line class="cl" x1="142.6" y1="189.0" x2="149.4" y2="189.0"/><line class="cl" x1="146.0" y1="185.6" x2="146.0" y2="192.4"/>
+<polyline class="cut" points="53.0,7.0 53.0,0.0 63.0,0.0 63.0,7.0"/>
+<line class="bend" x1="53.0" y1="7.0" x2="63.0" y2="7.0"/>
+<circle class="cut" cx="58.0" cy="4.0" r="1.7"/><line class="cl" x1="54.6" y1="4.0" x2="61.4" y2="4.0"/><line class="cl" x1="58.0" y1="0.6000000000000001" x2="58.0" y2="7.4"/>
+<polyline class="cut" points="53.0,186.0 53.0,193.0 63.0,193.0 63.0,186.0"/>
+<line class="bend" x1="53.0" y1="186.0" x2="63.0" y2="186.0"/>
+<circle class="cut" cx="58.0" cy="189.0" r="1.7"/><line class="cl" x1="54.6" y1="189.0" x2="61.4" y2="189.0"/><line class="cl" x1="58.0" y1="185.6" x2="58.0" y2="192.4"/>
+<circle class="cut" cx="102.0" cy="116.5" r="3.0"/><line class="cl" x1="96.0" y1="116.5" x2="108.0" y2="116.5"/><line class="cl" x1="102.0" y1="110.5" x2="102.0" y2="122.5"/>
+<text x="56.0" y="66.0">roof</text>
+<line class="cut" x1="0" y1="201.0" x2="50" y2="201.0"/><line class="cut" x1="0" y1="199.0" x2="0" y2="203.0"/><line class="cut" x1="50" y1="199.0" x2="50" y2="203.0"/><text x="52" y="202.0">50 mm: check with a ruler before cutting</text>
+<text x="0" y="208.0">Hood flat pattern: sheet ~1 mm, 204 x 193 mm overall (print on A3, or tile).</text>
+<text x="0" y="213.0">Red dashed = bend 90 deg. Fold the four walls DOWN from the roof, then fold the</text>
+<text x="0" y="218.0">corner flaps onto the front/back walls and rivet or screw them.</text>
+<text x="0" y="223.0">Clamp tabs on the free edges bend OUTWARD. Drill the tab holes after bending:</text>
+<text x="0" y="228.0">they sit only 3 mm from the wall. 6 mm hole = DS18B20 probe.</text>
+<text x="0" y="233.0">Bend allowance not included: cut slightly large and trim.</text>
+</svg>

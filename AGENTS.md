@@ -18,7 +18,8 @@ AGENTS.md               this file
 docs/                   design docs (source of truth for behaviour)
   decisions.md          ADR log + open questions
 hardware/kicad/         KiCad schematic (+ PDF export)
-hardware/duct/          duct CAD (SolidCraft .sc), STL/STEP exports, metal cutting templates
+hardware/duct/          duct designs, one folder each: horizontal/, vertical/, folded/
+                        (SolidCraft .sc, STL/STEP exports, metal cutting templates)
 spec/                   TLA+ model of the safety state machine (make -C spec check)
 flake.nix               dev shell: nix develop (TLA+ tools, Python for docs diagrams)
 firmware/               (not yet created) ESP32 firmware

@@ -24,6 +24,7 @@ Lightweight ADRs. Append new decisions; supersede old ones rather than editing t
 | ADR-018 | Duct v1: printed cold side, metal hot side, floor-standing | Proposed (draft) |
 | ADR-019 | Fans side by side in one shared tunnel, no backflow flaps; heat needs both fans | Accepted |
 | ADR-020 | Heater channel fuses 15 A | Accepted |
+| ADR-021 | Three duct layouts (horizontal, vertical upflow, folded slab), one folder each | Proposed (draft) |
 
 ---
 
@@ -136,6 +137,17 @@ Lightweight ADRs. Append new decisions; supersede old ones rather than editing t
 **Decision:** 15 A blade fuse per heater channel (F2, F3). Main fuse stays 25 A, fans + logic 3 A.
 **Why:** The fuse's job is to protect the 14 AWG silicone wire against a short, which 15 A does. Overheating is handled by the TCO, K1 and the firmware, not the fuse. A 10 A fuse would run at 83 % of its rating and take a 125 % overload on every cold start, risking nuisance blows (and the temptation to fit a bigger fuse without thinking).
 
+
+### ADR-021: Three duct layouts, one folder each (proposed)
+**Context:** The horizontal duct (ADR-018) is about 162 × 131 × 100 mm, mostly because of its taper and flange, and it only suits a floor-standing unit. The owner wants a smaller unit that can be reused inside a filament dryer box or another printer's enclosure. The 12 V 100 W PTCs have not arrived, so all sizes still come from the previous project's 220 V 50 W heater.
+**Decision:** Keep three parametric designs side by side, each in its own folder with the same structure (`hardware/duct/horizontal/`, `vertical/`, `folded/`; the ADR-018 files moved to `horizontal/`):
+- **Vertical upflow:** printed inlet base with side slots → fan deck with both fans side by side blowing up → plenum → gasket → PTC plate → metal hood with a side outlet. About 100 × 86 × 126 mm.
+- **Folded slab:** fans behind the front wall blowing to the back, one under each PTC → air turns up through the PTC plate → metal hood → outlet on the same front face. About 196 × 50 × 114 mm.
+All three keep ADR-018's materials rule (plastic only upstream of the gasket, metal plate and metal outlet part downstream) and ADR-019's shared plenum, so heating still needs both fans. The folded design places the fans apart, but in one plenum, so ADR-019's reasoning is unchanged. No firmware, spec or safety rule changes.
+**Why:** Upward flow keeps the fans in the coolest air (they cap dry mode at 65 °C) and lets residual heat rise away from the fans and printed parts after a stop. The folded slab trades two turns and some risk of recirculation for a 50 mm depth. Keeping all three lets the real PTC size and the target host decide.
+**Recommended first build:** vertical.
+**Open:** Same as ADR-018: PTC sizes, fin window, tab width and fan screw pitch are placeholders or estimates. Status stays *Proposed* until the 12 V 100 W PTCs are measured, the chosen design is updated and a cold fit passes. For the folded design, also measure the fan intake temperature in dry mode (hot outlet air on the same face).
+
 ---
 
 ## Open questions
@@ -143,8 +155,9 @@ Lightweight ADRs. Append new decisions; supersede old ones rather than editing t
 - Firmware framework (ADR-012).
 - Fan wire colours, confirmed with a multimeter.
 - Which printer goes inside the shelter (sets the heater-mode `max_target`).
-- Exact PTC part and its size compared with the duct cross-section. Duct v1 uses the previous project's 220 V 50 W PTC dimensions as placeholders; confirm the 12 V 100 W parts (see `hardware/duct/README.md` → Verify first).
+- Exact PTC part and its size compared with the duct cross-section. All three duct designs use the previous project's 220 V 50 W PTC dimensions as placeholders; confirm the 12 V 100 W parts (see each design's README in `hardware/duct/` → Verify first).
 - Duct material near the PTC: proposed in ADR-018 (metal hot side, silicone gasket); confirm with commissioning temperatures.
+- Which duct layout to build first (ADR-021): vertical recommended; depends on the real PTC size and where the unit goes.
 - Dry-mode vent: passive hole vs exhaust fan vs servo flap.
 - Backflow flaps (FMEA A16) to allow heating on one fan; until then any heating needs both fans (ADR-019).
 - Heater MOSFET: is the IRLB8721 fully on at a 3.3 V gate, or is a gate driver needed? (FMEA A3)

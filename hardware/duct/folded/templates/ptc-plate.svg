@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="220.0mm" height="110.0mm" viewBox="-12 -12 220.0 110.0">
+<style>.cut{fill:none;stroke:#000;stroke-width:0.3}.bend{fill:none;stroke:#c00;stroke-width:0.3;stroke-dasharray:3 2}.cl{stroke:#08f;stroke-width:0.15;stroke-dasharray:6 2 1 2}text{font:3px sans-serif;fill:#000}</style>
+<rect class="cut" x="0" y="0" width="196.0" height="50.0"/>
+<rect class="cut" x="120.25" y="15.5" width="54.0" height="19.0"/>
+<circle class="cut" cx="188.25" cy="25.0" r="1.7"/><line class="cl" x1="184.85" y1="25.0" x2="191.65" y2="25.0"/><line class="cl" x1="188.25" y1="21.6" x2="188.25" y2="28.4"/>
+<circle class="cut" cx="106.25" cy="25.0" r="1.7"/><line class="cl" x1="102.85" y1="25.0" x2="109.65" y2="25.0"/><line class="cl" x1="106.25" y1="21.6" x2="106.25" y2="28.4"/>
+<rect class="cut" x="21.75" y="15.5" width="54.0" height="19.0"/>
+<circle class="cut" cx="89.75" cy="25.0" r="1.7"/><line class="cl" x1="86.35" y1="25.0" x2="93.15" y2="25.0"/><line class="cl" x1="89.75" y1="21.6" x2="89.75" y2="28.4"/>
+<circle class="cut" cx="7.75" cy="25.0" r="1.7"/><line class="cl" x1="4.35" y1="25.0" x2="11.15" y2="25.0"/><line class="cl" x1="7.75" y1="21.6" x2="7.75" y2="28.4"/>
+<circle class="cut" cx="6.0" cy="4.0" r="1.7"/><line class="cl" x1="2.6" y1="4.0" x2="9.4" y2="4.0"/><line class="cl" x1="6.0" y1="0.6000000000000001" x2="6.0" y2="7.4"/>
+<circle class="cut" cx="6.0" cy="46.0" r="1.7"/><line class="cl" x1="2.6" y1="46.0" x2="9.4" y2="46.0"/><line class="cl" x1="6.0" y1="42.6" x2="6.0" y2="49.4"/>
+<circle class="cut" cx="98.0" cy="4.0" r="1.7"/><line class="cl" x1="94.6" y1="4.0" x2="101.4" y2="4.0"/><line class="cl" x1="98.0" y1="0.6000000000000001" x2="98.0" y2="7.4"/>
+<circle class="cut" cx="98.0" cy="46.0" r="1.7"/><line class="cl" x1="94.6" y1="46.0" x2="101.4" y2="46.0"/><line class="cl" x1="98.0" y1="42.6" x2="98.0" y2="49.4"/>
+<circle class="cut" cx="190.0" cy="4.0" r="1.7"/><line class="cl" x1="186.6" y1="4.0" x2="193.4" y2="4.0"/><line class="cl" x1="190.0" y1="0.6000000000000001" x2="190.0" y2="7.4"/>
+<circle class="cut" cx="190.0" cy="46.0" r="1.7"/><line class="cl" x1="186.6" y1="46.0" x2="193.4" y2="46.0"/><line class="cl" x1="190.0" y1="42.6" x2="190.0" y2="49.4"/>
+<line class="cut" x1="0" y1="58.0" x2="50" y2="58.0"/><line class="cut" x1="0" y1="56.0" x2="0" y2="60.0"/><line class="cut" x1="50" y1="56.0" x2="50" y2="60.0"/><text x="52" y="59.0">50 mm: check with a ruler before cutting</text>
+<text x="0" y="65.0">PTC plate: 1 x scrap aluminium or steel, 196 x 50 mm, ~1 mm. Seen from above.</text>
+<text x="0" y="70.0">2 windows 54 x 19 (fin area: ESTIMATED, check against your PTC).</text>
+<text x="0" y="75.0">M3 (3.4) holes: 4 on the centre line = PTC tabs; 6 along the edges = clamp bolts.</text>
+<text x="0" y="80.0">Deburr all edges. PTCs sit on TOP of the plate (downstream); nuts underneath.</text>
+</svg>

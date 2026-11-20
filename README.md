@@ -38,7 +38,7 @@ as Klipper, a phone, or a script only send high-level commands.
 | [docs/09-fmea.md](docs/09-fmea.md) | Failure modes and effects analysis, open safety actions |
 | [docs/10-verification.md](docs/10-verification.md) | Verification flow: safety rules → TLA+ → C → tests/CBMC, traceability table |
 | [hardware/BOM.md](hardware/BOM.md) | Shopping list for the v1 perfboard build (electronics, wiring, duct hardware) |
-| [hardware/duct/](hardware/duct/README.md) | Duct v1 draft: printed + sheet-metal parts, STL/STEP, cutting templates |
+| [hardware/duct/](hardware/duct/README.md) | Three duct layouts (horizontal, vertical upflow, folded slab): printed + sheet-metal parts, STL/STEP, cutting templates |
 | [hardware/kicad/](hardware/kicad/) | KiCad schematic ([PDF](hardware/kicad/chamber-heater.pdf)) |
 | [spec/](spec/README.md) | TLA+ model of the safety state machine |
 | [docs/decisions.md](docs/decisions.md) | Decision log (ADR-style) and open questions |

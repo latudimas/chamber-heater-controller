@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="124.0mm" height="146.0mm" viewBox="-12 -12 124.0 146.0">
+<style>.cut{fill:none;stroke:#000;stroke-width:0.3}.bend{fill:none;stroke:#c00;stroke-width:0.3;stroke-dasharray:3 2}.cl{stroke:#08f;stroke-width:0.15;stroke-dasharray:6 2 1 2}text{font:3px sans-serif;fill:#000}</style>
+<rect class="cut" x="0" y="0" width="100.0" height="86.0"/>
+<rect class="cut" x="23.0" y="15.25" width="54.0" height="19.0"/>
+<circle class="cut" cx="91.0" cy="24.75" r="1.7"/><line class="cl" x1="87.6" y1="24.75" x2="94.4" y2="24.75"/><line class="cl" x1="91.0" y1="21.35" x2="91.0" y2="28.15"/>
+<circle class="cut" cx="94.0" cy="4.5" r="1.7"/><line class="cl" x1="90.6" y1="4.5" x2="97.4" y2="4.5"/><line class="cl" x1="94.0" y1="1.1" x2="94.0" y2="7.9"/>
+<circle class="cut" cx="9.0" cy="24.75" r="1.7"/><line class="cl" x1="5.6" y1="24.75" x2="12.4" y2="24.75"/><line class="cl" x1="9.0" y1="21.35" x2="9.0" y2="28.15"/>
+<circle class="cut" cx="6.0" cy="4.5" r="1.7"/><line class="cl" x1="2.6" y1="4.5" x2="9.4" y2="4.5"/><line class="cl" x1="6.0" y1="1.1" x2="6.0" y2="7.9"/>
+<rect class="cut" x="23.0" y="51.75" width="54.0" height="19.0"/>
+<circle class="cut" cx="91.0" cy="61.25" r="1.7"/><line class="cl" x1="87.6" y1="61.25" x2="94.4" y2="61.25"/><line class="cl" x1="91.0" y1="57.85" x2="91.0" y2="64.65"/>
+<circle class="cut" cx="94.0" cy="81.5" r="1.7"/><line class="cl" x1="90.6" y1="81.5" x2="97.4" y2="81.5"/><line class="cl" x1="94.0" y1="78.1" x2="94.0" y2="84.9"/>
+<circle class="cut" cx="9.0" cy="61.25" r="1.7"/><line class="cl" x1="5.6" y1="61.25" x2="12.4" y2="61.25"/><line class="cl" x1="9.0" y1="57.85" x2="9.0" y2="64.65"/>
+<circle class="cut" cx="6.0" cy="81.5" r="1.7"/><line class="cl" x1="2.6" y1="81.5" x2="9.4" y2="81.5"/><line class="cl" x1="6.0" y1="78.1" x2="6.0" y2="84.9"/>
+<line class="cut" x1="0" y1="94.0" x2="50" y2="94.0"/><line class="cut" x1="0" y1="92.0" x2="0" y2="96.0"/><line class="cut" x1="50" y1="92.0" x2="50" y2="96.0"/><text x="52" y="95.0">50 mm: check with a ruler before cutting</text>
+<text x="0" y="101.0">PTC plate: 1 x scrap aluminium or steel, 100 x 86 mm, ~1 mm. Seen from above.</text>
+<text x="0" y="106.0">2 windows 54 x 19 (fin area: ESTIMATED, check against your PTC).</text>
+<text x="0" y="111.0">M3 (3.4) holes: inner 4 = PTC tabs; corner 4 = clamp bolts.</text>
+<text x="0" y="116.0">Deburr all edges. PTCs sit on TOP of the plate (downstream); nuts underneath.</text>
+</svg>

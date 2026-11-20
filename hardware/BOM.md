@@ -86,7 +86,9 @@ at 83 % and risk nuisance blows. There is no 12 A blade fuse.
 
 ## 6. Duct hardware
 
-See [`duct/README.md`](duct/README.md) for where each one goes.
+This list is for the **horizontal** duct; see [`duct/horizontal/README.md`](duct/horizontal/README.md)
+for where each one goes. The [vertical](duct/vertical/README.md) and
+[folded](duct/folded/README.md) designs list their own hardware.
 
 | Have | Qty | Part | Notes |
 |---|---|---|---|

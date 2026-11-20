@@ -2,15 +2,15 @@
 
 Print the SVGs at 100 % (no "fit to page"), check the 50 mm scale bar with a
 ruler, then glue or trace onto the sheet. Values match the CAD parameters in
-hardware/duct/chamber-heater-duct.sc; change both together.
+hardware/duct/horizontal/duct-horizontal.sc; change both together.
 
-Usage: python hardware/duct/templates/gen_templates.py   (standard library only)
+Usage: python hardware/duct/horizontal/templates/gen_templates.py   (standard library only)
 """
 import os
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
-# ---- CAD parameters (keep in step with chamber-heater-duct.sc) -------------
+# ---- CAD parameters (keep in step with duct-horizontal.sc) -------------
 plate_W, plate_H = 124.0, 80.0      # PTC plate and gasket outline
 bolt_y, bolt_z = 56.0, 30.0         # 4 x M3 clamp bolts
 win_L, win_W = 54.0, 19.0           # window per PTC (fin area, ESTIMATED)
